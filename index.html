@@ -383,6 +383,110 @@
       border-color: #c7d2fe;
     }
 
+    .layer-card {
+      border-top: 6px solid #7690bd;
+      background:
+        linear-gradient(90deg, rgba(118,144,189,.08) 0 1px, transparent 1px 25%),
+        linear-gradient(180deg, rgba(253,254,255,.98), rgba(243,247,253,.96));
+      background-size: 25% 100%, 100% 100%;
+    }
+
+    .layer-intro {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .layer-intro .hint {
+      flex: 1 1 420px;
+      margin: 0;
+    }
+
+    .candidate-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 5px 10px;
+      border: 1px solid rgba(173,141,62,.38);
+      border-radius: 999px;
+      background: var(--gold-soft);
+      color: #6f5720;
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: .02em;
+    }
+
+    .risk-track {
+      display: grid;
+      gap: 10px;
+    }
+
+    .risk-layer {
+      position: relative;
+      overflow: hidden;
+      padding: 14px;
+      border: 1px solid rgba(68,91,137,.22);
+      border-radius: 15px;
+      background: rgba(255,255,255,.88);
+    }
+
+    .risk-layer::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 4px;
+      background: var(--layer-color, #7690bd);
+    }
+
+    .risk-layer:nth-child(2) { --layer-color: #4f7f8f; }
+    .risk-layer:nth-child(3) { --layer-color: #9b7a36; }
+
+    .layer-kicker {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .risk-layer h3 {
+      margin: 0 0 10px;
+      color: var(--navy);
+      font-size: 16px;
+    }
+
+    .layer-note {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .layer-summary {
+      margin-top: 12px;
+      border-color: rgba(118,144,189,.35);
+      background: rgba(231,237,248,.72);
+      color: #31486f;
+      font-weight: 750;
+    }
+
+    details.activity-context {
+      margin-top: 14px;
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+    }
+
+    details.activity-context summary {
+      min-height: 44px;
+      color: #31486f;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
     /* v0.4.1 · 术前 MDT 雾蓝会诊主题 */
     body {
       background:
@@ -742,6 +846,10 @@
         min-height: 260px;
       }
 
+      .risk-track {
+        grid-template-columns: 1fr;
+      }
+
       .footer-note {
         padding-inline: 20px;
         font-size: 12px;
@@ -783,6 +891,10 @@
 
       .decision-track {
         grid-template-columns: repeat(6, minmax(0, 1fr));
+      }
+
+      .risk-track {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
     }
   </style>
@@ -902,20 +1014,69 @@
       </div>
     </section>
 
-    <section class="card" aria-labelledby="mets-title">
-      <h2 id="mets-title">4. 功能状态评估</h2>
-      <p class="hint">采用简化 METs 判断。勾选患者可以完成的活动。</p>
-      <div class="checkbox-grid">
-        <label class="check"><input id="walkBlocks" type="checkbox">能否平地步行 1-2 个街区</label>
-        <label class="check"><input id="climbStairs" type="checkbox">能否上一层楼</label>
-        <label class="check"><input id="lightHousework" type="checkbox">能否做轻家务</label>
-        <label class="check"><input id="moderateActivity" type="checkbox">能否进行中等体力活动</label>
+    <section class="card layer-card" aria-labelledby="layer-title">
+      <h2 id="layer-title">4. 分层风险画像</h2>
+      <div class="layer-intro">
+        <p class="hint">分别记录总体死亡风险、功能容量与老年脆弱性；各层预测目标不同，不相加、不生成未经验证的综合总分。</p>
+        <span class="candidate-badge">candidate / in_review</span>
       </div>
-      <div id="metsStatus" class="status yellow" style="margin-top: 12px;">功能状态较差或不明确：&lt;4 METs 或无法判断</div>
+
+      <div class="risk-track" aria-label="独立风险分层轨道">
+        <article class="risk-layer">
+          <span class="layer-kicker">Overall 30-day mortality</span>
+          <h3>SORT 总体30天死亡风险</h3>
+          <label>已获得的 SORT 风险
+            <input id="sortRisk" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="%">
+          </label>
+          <p class="layer-note">仅手工录入外部已获得结果；本系统不运行 SORT 算法。</p>
+        </article>
+
+        <article class="risk-layer">
+          <span class="layer-kicker">Functional capacity</span>
+          <h3>DASI 功能容量</h3>
+          <label>DASI 分数
+            <input id="dasiScore" type="number" min="0" max="58.2" step="0.1" inputmode="decimal" placeholder="0–58.2">
+          </label>
+          <p class="layer-note">录入已完成量表的总分；不在页面复制完整问卷或自动换算。</p>
+        </article>
+
+        <article class="risk-layer">
+          <span class="layer-kicker">Older-person frailty</span>
+          <h3>老年脆弱性</h3>
+          <div class="two">
+            <label>评估工具
+              <select id="frailtyTool">
+                <option value="">未选择</option>
+                <option value="CFS">CFS</option>
+                <option value="FRAIL">FRAIL</option>
+              </select>
+            </label>
+            <label>既有分数
+              <input id="frailtyScore" type="number" step="1" inputmode="numeric" placeholder="先选择工具" disabled>
+            </label>
+          </div>
+          <p id="frailtyHint" class="layer-note">请选择工具后录入由受训人员获得的既有分数。</p>
+        </article>
+      </div>
+
+      <div id="layerSummary" class="small-note layer-summary">尚未录入 SORT、DASI 或脆弱性分数。</div>
+
+      <details class="activity-context">
+        <summary>展开简化活动询问（教学辅助，不替代 DASI）</summary>
+        <p class="hint">勾选患者可以完成的活动，用于保留既有 METs 教学提示。</p>
+        <div class="checkbox-grid">
+          <label class="check"><input id="walkBlocks" type="checkbox">能否平地步行 1-2 个街区</label>
+          <label class="check"><input id="climbStairs" type="checkbox">能否上一层楼</label>
+          <label class="check"><input id="lightHousework" type="checkbox">能否做轻家务</label>
+          <label class="check"><input id="moderateActivity" type="checkbox">能否进行中等体力活动</label>
+        </div>
+        <div id="metsStatus" class="status yellow" style="margin-top: 12px;">功能状态较差或不明确：&lt;4 METs 或无法判断</div>
+      </details>
     </section>
 
     <section class="card" aria-labelledby="exam-title">
-      <h2 id="exam-title">5. 检查结果</h2>
+      <h2 id="exam-title">5. 风险修饰因子与检查结果</h2>
+      <p class="hint">BNP/NT-proBNP、肌钙蛋白与 ECG 独立展示；数值必须结合本院检测方法、参考范围和临床背景解释。</p>
       <div class="two">
         <label>最近 ECG
           <select id="ecg">
@@ -934,18 +1095,30 @@
         <label>LVEF 数值
           <input id="lvef" type="number" min="0" max="100" step="1" inputmode="numeric" placeholder="%">
         </label>
-        <label>BNP 或 NT-proBNP
+        <label>利钠肽类型
+          <select id="natriureticType">
+            <option value="">未选择</option>
+            <option value="BNP">BNP</option>
+            <option value="NT-proBNP">NT-proBNP</option>
+          </select>
+        </label>
+        <label>BNP / NT-proBNP 数值
+          <input id="natriureticValue" type="number" min="0" step="0.1" inputmode="decimal" placeholder="pg/mL 或 ng/L">
+        </label>
+        <label>BNP / NT-proBNP 本地解释
           <select id="bnp">
             <option value="未做">未做</option>
             <option value="正常">正常</option>
             <option value="升高">升高</option>
+            <option value="待解释">结果待本地参考范围解释</option>
           </select>
         </label>
-        <label>Troponin
+        <label>肌钙蛋白
           <select id="troponin">
             <option value="未做">未做</option>
             <option value="正常">正常</option>
             <option value="升高">升高</option>
+            <option value="待解释">结果待本地参考范围解释</option>
           </select>
         </label>
         <label>肌酐数值
@@ -1087,7 +1260,7 @@
   </main>
 
   <footer class="footer-note">
-    v0.6.0 Candidate Layer · AKB V2.1.1 · MDT Roundtable
+    v0.7.0 Layered Assessment Alpha · AKB V2.1.1 · MDT Roundtable
   </footer>
 
   <!-- JavaScript 数据与逻辑区 -->
@@ -1096,7 +1269,7 @@
     // OPC-AKB-SNAPSHOT:START
     const OPC_KNOWLEDGE_SNAPSHOT = {
           "version": "AKB V2.1.1 / OPC Self-Growing Knowledge Loop",
-          "snapshotDate": "2026-07-26",
+          "snapshotDate": "2026-07-27",
           "generatedBy": "tools/akb_iteration_engine.py",
           "canonicalStore": "Obsidian AKB Markdown",
           "knowledgeHash": "fa485ce8a45a088668f51eb9",
@@ -1214,6 +1387,7 @@
       troponinMonitor: "中高危患者可考虑围术期 Troponin 监测。",
       echo: "Echo：心衰、瓣膜病、呼吸困难、LVEF 低或临床状态变化时，提示考虑心超评估。",
       cied: "起搏器/ICD：建议术前明确设备类型、起搏依赖、最近程控情况和电磁干扰管理方案。",
+      layeredBoundary: "SORT、DASI、CFS/FRAIL 与风险修饰因子为相互独立的候选层；当前仅用于结构化记录和人工综合判断，不自动相加、不生成新的临床阈值或综合总分。",
       lowSignal: "目前未识别出明确高危提示；仍需结合病史、体格检查、指南和临床判断综合评估。"
     };
     const MDT_EVIDENCE = {
@@ -1243,6 +1417,7 @@
     }
 
     function numberValue(id) {
+      if (value(id) === "") return null;
       const num = Number(value(id));
       return Number.isFinite(num) ? num : null;
     }
@@ -1299,6 +1474,73 @@
       const bmi = weightKg / (heightM * heightM);
       bmiField.value = bmi.toFixed(1);
       return bmi.toFixed(1);
+    }
+
+    function updateFrailtyInput() {
+      const tool = value("frailtyTool");
+      const scoreInput = $("frailtyScore");
+      const hint = $("frailtyHint");
+
+      if (!tool) {
+        scoreInput.disabled = true;
+        scoreInput.value = "";
+        scoreInput.removeAttribute("min");
+        scoreInput.removeAttribute("max");
+        scoreInput.placeholder = "先选择工具";
+        hint.textContent = "请选择工具后录入由受训人员获得的既有分数。";
+        hint.style.color = "";
+        return;
+      }
+
+      const isCfs = tool === "CFS";
+      scoreInput.disabled = false;
+      scoreInput.min = isCfs ? "1" : "0";
+      scoreInput.max = isCfs ? "9" : "5";
+      scoreInput.step = "1";
+      scoreInput.placeholder = isCfs ? "1–9" : "0–5";
+
+      const score = numberValue("frailtyScore");
+      const inRange = score === null || (score >= Number(scoreInput.min) && score <= Number(scoreInput.max) && Number.isInteger(score));
+      hint.textContent = score === null
+        ? tool + "：请录入既有分数（" + scoreInput.min + "–" + scoreInput.max + "）。"
+        : inRange
+          ? tool + " " + score + " 分已记录；候选层不自动解释阈值。"
+          : "分数超出 " + tool + " 可录入范围（" + scoreInput.min + "–" + scoreInput.max + "），请核对。";
+      hint.style.color = inRange ? "" : "var(--red)";
+    }
+
+    function layeredAssessment() {
+      const sortRisk = numberValue("sortRisk");
+      const dasiScore = numberValue("dasiScore");
+      const frailtyTool = value("frailtyTool");
+      const frailtyScore = numberValue("frailtyScore");
+      const sortValid = sortRisk === null || (sortRisk >= 0 && sortRisk <= 100);
+      const dasiValid = dasiScore === null || (dasiScore >= 0 && dasiScore <= 58.2);
+      const frailtyValid = !frailtyTool || frailtyScore === null ||
+        (frailtyTool === "CFS" && Number.isInteger(frailtyScore) && frailtyScore >= 1 && frailtyScore <= 9) ||
+        (frailtyTool === "FRAIL" && Number.isInteger(frailtyScore) && frailtyScore >= 0 && frailtyScore <= 5);
+
+      const parts = [
+        "SORT：" + (sortRisk === null ? "未录入" : sortValid ? sortRisk + "%" : "请核对范围"),
+        "DASI：" + (dasiScore === null ? "未录入" : dasiValid ? dasiScore + " 分" : "请核对范围"),
+        "脆弱性：" + (!frailtyTool ? "未选择工具" : frailtyScore === null ? frailtyTool + " 未录入" : frailtyValid ? frailtyTool + " " + frailtyScore + " 分" : "请核对范围")
+      ];
+
+      const summary = $("layerSummary");
+      summary.textContent = parts.join(" · ") + "。各层独立展示，不合并总分。";
+      summary.style.borderColor = sortValid && dasiValid && frailtyValid ? "" : "var(--red)";
+
+      return { sortRisk, dasiScore, frailtyTool, frailtyScore, sortValid, dasiValid, frailtyValid };
+    }
+
+    function natriureticText() {
+      const type = value("natriureticType");
+      const result = numberValue("natriureticValue");
+      const localInterpretation = value("bnp");
+      const measurement = type
+        ? type + (result === null ? "（未录入数值）" : " " + result + " pg/mL 或 ng/L")
+        : result === null ? "未选择类型/未录入数值" : "未选择类型，数值 " + result;
+      return measurement + "；本地解释：" + localInterpretation;
     }
 
     function isCreatinineHigh() {
@@ -1408,7 +1650,7 @@
     function generateRecommendations() {
       const rcri = calculateRCRI();
       const mets = assessMETs();
-      const recommendations = [opcRule("gate")];
+      const recommendations = [opcRule("gate"), opcRule("layeredBoundary")];
       const intermediateOrHigh = isIntermediateOrHighRisk(rcri.score);
       const lvef = numberValue("lvef");
 
@@ -1508,6 +1750,7 @@
     function generateMdtDraft() {
       const triggers = collectMdtTriggers();
       const signals = mdtCandidateSignals();
+      const layers = layeredAssessment();
       const draft = [
         "围术期 MDT 麻醉会诊草稿（非自动临床决定）",
         "",
@@ -1517,6 +1760,10 @@
         "具体问题：" + (value("mdtQuestion") || "未填写"),
         "人工确认的触发原因：" + (triggers.length ? triggers.join("；") : "未填写"),
         "系统候选线索：" + (signals.length ? signals.join("；") : "无；仍需人工判断"),
+        "分层风险画像（不合并总分）：SORT " + (layers.sortRisk === null ? "未录入" : layers.sortRisk + "%") +
+          "；DASI " + (layers.dasiScore === null ? "未录入" : layers.dasiScore + " 分") +
+          "；脆弱性 " + (!layers.frailtyTool ? "未选择" : layers.frailtyTool + " " + (layers.frailtyScore === null ? "未录入" : layers.frailtyScore + " 分")),
+        "风险修饰因子：ECG " + value("ecg") + "；" + natriureticText() + "；肌钙蛋白 " + value("troponin"),
         "",
         "二、患者目标与共享决策",
         value("mdtPatientGoals") || "未填写患者目标、价值观、不能接受的结局与决策偏好",
@@ -1590,6 +1837,7 @@
       const history = selectedHeartHistory();
       const creatinine = value("creatinine");
       const mdtDraft = generateMdtDraft();
+      const layers = layeredAssessment();
 
       const report = [
         "心脏病患者接受非心脏手术术前麻醉评估报告",
@@ -1614,32 +1862,38 @@
         "四、心脏病史",
         history.length ? history.join("、") : "未勾选明确心脏病史或相关高危病史",
         "",
-        "五、功能状态",
+        "五、分层风险画像（candidate/in_review；各层独立，不合并总分）",
+        "总体30天死亡风险（SORT，手工录入）：" + (layers.sortRisk === null ? "未录入" : layers.sortRisk + "%"),
+        "功能容量（DASI）：" + (layers.dasiScore === null ? "未录入" : layers.dasiScore + " 分"),
+        "老年脆弱性：" + (!layers.frailtyTool ? "未选择 CFS/FRAIL" : layers.frailtyTool + " " + (layers.frailtyScore === null ? "未录入分数" : layers.frailtyScore + " 分")),
+        "边界：不在本系统运行 SORT、不复制 DASI/CFS/FRAIL 完整量表、不自动解释候选阈值。",
+        "",
+        "六、简化活动询问（教学辅助，不替代 DASI）",
         mets.label,
         "已勾选可完成活动数量：" + mets.count + "/4",
         "",
-        "六、RCRI 教学评分",
+        "七、RCRI 教学评分",
         "RCRI = " + rcri.score,
         "得分原因：",
         rcri.reasons.length ? rcri.reasons.map(reason => "✓ " + reason).join("\n") : "暂无得分项目",
         "",
-        "七、检查结果",
+        "八、风险修饰因子与检查结果",
         "最近 ECG：" + value("ecg"),
         "最近 Echo：" + value("echo"),
         "LVEF：" + (value("lvef") ? value("lvef") + "%" : "未填写"),
-        "BNP 或 NT-proBNP：" + value("bnp"),
-        "Troponin：" + value("troponin"),
+        "BNP / NT-proBNP：" + natriureticText(),
+        "肌钙蛋白：" + value("troponin"),
         "肌酐：" + (creatinine ? creatinine + " μmol/L" : "未填写"),
         "是否肌酐 >177 μmol/L：" + (creatinine ? yesNoText(isCreatinineHigh()) : "未判断"),
         "呼吸困难或临床状态变化：" + yesNoText(checked("dyspneaOrChange")),
         "",
-        "八、辅助评估建议",
+        "九、辅助评估建议",
         recommendations.map((text, index) => (index + 1) + ". " + text).join("\n"),
         "",
-        "九、围术期 MDT 麻醉会诊草稿",
+        "十、围术期 MDT 麻醉会诊草稿",
         mdtDraft,
         "",
-        "十、免责声明",
+        "十一、免责声明",
         DISCLAIMER
       ].join("\n");
 
@@ -1687,6 +1941,8 @@
 
     function updateAll() {
       calculateBMI();
+      updateFrailtyInput();
+      layeredAssessment();
       updateCreatinineStatus();
       syncRCRIItems();
       calculateRCRI();
