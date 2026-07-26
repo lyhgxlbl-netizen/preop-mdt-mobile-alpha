@@ -191,21 +191,13 @@
       font-size: 14px;
     }
 
-    .acs-box {
-      padding: 14px;
-      border-radius: 14px;
-      border: 1px solid #b8cdf5;
-      background: var(--blue-soft);
-    }
-
     .button-row {
       display: grid;
       gap: 10px;
       margin-top: 14px;
     }
 
-    button,
-    .link-button {
+    button {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -625,21 +617,18 @@
       outline: 3px solid rgba(213,184,108,.22);
     }
 
-    button,
-    .link-button {
+    button {
       background: linear-gradient(135deg, #203d6c, #10284f);
       box-shadow: 0 10px 22px rgba(13,31,62,.18);
       transition: transform .18s ease, box-shadow .18s ease;
     }
 
-    button:hover,
-    .link-button:hover {
+    button:hover {
       transform: translateY(-1px);
       box-shadow: 0 14px 28px rgba(13,31,62,.24);
     }
 
-    button:focus-visible,
-    .link-button:focus-visible {
+    button:focus-visible {
       outline: 3px solid rgba(213,184,108,.55);
       outline-offset: 3px;
     }
@@ -737,9 +726,7 @@
         min-height: 48px;
       }
 
-      .button-row button,
-      .button-row .link-button,
-      .acs-box .link-button {
+      .button-row button {
         width: 100%;
       }
 
@@ -888,36 +875,8 @@
       </div>
     </section>
 
-    <section class="card" aria-labelledby="acs-title">
-      <h2 id="acs-title">3. ACS-NSQIP 官方计算器入口</h2>
-      <div class="acs-box">
-        <h3>ACS-NSQIP Surgical Risk Calculator</h3>
-        <p class="hint">请在新窗口打开官方计算器，由医生手动填写结果。本应用不使用 iframe，不自动化填写，不复制 ACS-NSQIP 计算逻辑。</p>
-        <a class="link-button" href="https://riskcalculator.facs.org/" target="_blank" rel="noopener noreferrer">
-          打开 ACS-NSQIP 官方计算器
-        </a>
-      </div>
-
-      <h3>ACS-NSQIP 手动填写结果</h3>
-      <div class="two">
-        <label>Serious complication risk (%)
-          <input id="nsqipSerious" type="number" min="0" step="0.1" inputmode="decimal">
-        </label>
-        <label>Any complication risk (%)
-          <input id="nsqipAny" type="number" min="0" step="0.1" inputmode="decimal">
-        </label>
-        <label>Cardiac complication risk (%)
-          <input id="nsqipCardiac" type="number" min="0" step="0.1" inputmode="decimal">
-        </label>
-        <label>Death risk (%)
-          <input id="nsqipDeath" type="number" min="0" step="0.1" inputmode="decimal">
-        </label>
-      </div>
-      <div class="small-note">ACS-NSQIP 结果：由医生通过官方计算器手动填写，仅供围术期风险沟通与辅助评估使用。</div>
-    </section>
-
     <section class="card" aria-labelledby="history-title">
-      <h2 id="history-title">4. 心脏病史</h2>
+      <h2 id="history-title">3. 心脏病史</h2>
       <div class="checkbox-grid">
         <label class="check"><input id="cad" type="checkbox">冠心病</label>
         <label class="check"><input id="mi" type="checkbox">既往心肌梗死</label>
@@ -944,7 +903,7 @@
     </section>
 
     <section class="card" aria-labelledby="mets-title">
-      <h2 id="mets-title">5. 功能状态评估</h2>
+      <h2 id="mets-title">4. 功能状态评估</h2>
       <p class="hint">采用简化 METs 判断。勾选患者可以完成的活动。</p>
       <div class="checkbox-grid">
         <label class="check"><input id="walkBlocks" type="checkbox">能否平地步行 1-2 个街区</label>
@@ -956,7 +915,7 @@
     </section>
 
     <section class="card" aria-labelledby="exam-title">
-      <h2 id="exam-title">6. 检查结果</h2>
+      <h2 id="exam-title">5. 检查结果</h2>
       <div class="two">
         <label>最近 ECG
           <select id="ecg">
@@ -1000,7 +959,7 @@
     </section>
 
     <section class="card" aria-labelledby="rcri-title">
-      <h2 id="rcri-title">7. RCRI 自动评分</h2>
+      <h2 id="rcri-title">6. RCRI 教学评分</h2>
       <p class="hint">勾选 RCRI 评分项目后自动计算总分；上方手术信息、心脏病史和肌酐结果也会同步勾选对应项目。</p>
       <div class="checkbox-grid">
         <label class="check"><input id="rcriHighRiskSurgery" class="rcri-item" type="checkbox">高危手术</label>
@@ -1018,7 +977,7 @@
     </section>
 
     <section class="card" aria-labelledby="recommend-title">
-      <h2 id="recommend-title">8. 辅助评估建议</h2>
+      <h2 id="recommend-title">7. 辅助评估建议</h2>
       <div class="small-note">本工具仅供教学和临床辅助参考，不替代医生最终判断。以下内容为辅助建议，不是自动诊断。</div>
       <ul id="recommendations" class="result-list"></ul>
     </section>
@@ -1027,7 +986,7 @@
       <div class="mdt-header">
         <div>
           <p class="eyebrow">人工会诊闭环 · 非自动决策</p>
-          <h2 id="mdt-title">9. 围术期 MDT 麻醉会诊工作台</h2>
+          <h2 id="mdt-title">8. 围术期 MDT 麻醉会诊工作台</h2>
         </div>
         <span class="review-badge">AKB V2.1.1 · in_review</span>
       </div>
@@ -1114,7 +1073,7 @@
     </section>
 
     <section class="card" aria-labelledby="report-title">
-      <h2 id="report-title">10. 一键复制综合评估报告</h2>
+      <h2 id="report-title">9. 一键复制综合评估报告</h2>
       <div class="button-row">
         <button type="button" onclick="generateReport()">生成评估报告</button>
         <button type="button" class="secondary" onclick="copyReport()">复制评估报告</button>
@@ -1128,17 +1087,16 @@
   </main>
 
   <footer class="footer-note">
-    v0.5.0 Mobile Alpha · AKB V2.1.1 · MDT Roundtable
+    v0.6.0 Candidate Layer · AKB V2.1.1 · MDT Roundtable
   </footer>
 
   <!-- JavaScript 数据与逻辑区 -->
   <script>
     const DISCLAIMER = "本工具仅用于教学和临床辅助评估，不替代医生最终判断。";
-    const NSQIP_NOTE = "ACS-NSQIP 结果：由医生通过官方计算器手动填写，仅供围术期风险沟通与辅助评估使用。";
     // OPC-AKB-SNAPSHOT:START
     const OPC_KNOWLEDGE_SNAPSHOT = {
           "version": "AKB V2.1.1 / OPC Self-Growing Knowledge Loop",
-          "snapshotDate": "2026-07-22",
+          "snapshotDate": "2026-07-26",
           "generatedBy": "tools/akb_iteration_engine.py",
           "canonicalStore": "Obsidian AKB Markdown",
           "knowledgeHash": "fa485ce8a45a088668f51eb9",
@@ -1209,6 +1167,20 @@
                       "status": "in_review",
                       "evidence": "unreviewed",
                       "role": "围术期 MDT 麻醉会诊证据与标准化文书进入 AKB"
+                },
+                {
+                      "id": "KC-2026-010",
+                      "note": "[[Knowledge_Candidate_RCRI_SORT_DASI_CFS_BNP_Preoperative_Layer]]",
+                      "status": "in_review",
+                      "evidence": "unreviewed",
+                      "role": "RCRI 主评估与 SORT/DASI/CFS/BNP 术前补充层候选方案"
+                },
+                {
+                      "id": "IA-2026-003",
+                      "note": "[[Impact_Assessment_RCRI_SORT_DASI_CFS_BNP_Preoperative_Layer]]",
+                      "status": "in_review",
+                      "evidence": "unreviewed",
+                      "role": "取消 ACS-NSQIP 与 RCRI/SORT/DASI/CFS/BNP 候选层影响评估"
                 },
                 {
                       "id": "AKB-INDEX-GUIDELINE",
@@ -1609,22 +1581,6 @@
       return items.filter(([_, id]) => checked(id)).map(([label]) => label);
     }
 
-    function nsqipText() {
-      const fields = [
-        ["Serious complication risk", "nsqipSerious"],
-        ["Any complication risk", "nsqipAny"],
-        ["Cardiac complication risk", "nsqipCardiac"],
-        ["Death risk", "nsqipDeath"]
-      ];
-
-      const result = fields.map(([label, id]) => {
-        const v = value(id);
-        return label + "：" + (v ? v + "%" : "未填写");
-      });
-
-      return result.join("；");
-    }
-
     function generateReport() {
       calculateBMI();
       updateCreatinineStatus();
@@ -1662,16 +1618,12 @@
         mets.label,
         "已勾选可完成活动数量：" + mets.count + "/4",
         "",
-        "六、RCRI 自动评分",
+        "六、RCRI 教学评分",
         "RCRI = " + rcri.score,
         "得分原因：",
         rcri.reasons.length ? rcri.reasons.map(reason => "✓ " + reason).join("\n") : "暂无得分项目",
         "",
-        "七、ACS-NSQIP 手动填写结果",
-        nsqipText(),
-        NSQIP_NOTE,
-        "",
-        "八、检查结果",
+        "七、检查结果",
         "最近 ECG：" + value("ecg"),
         "最近 Echo：" + value("echo"),
         "LVEF：" + (value("lvef") ? value("lvef") + "%" : "未填写"),
@@ -1681,13 +1633,13 @@
         "是否肌酐 >177 μmol/L：" + (creatinine ? yesNoText(isCreatinineHigh()) : "未判断"),
         "呼吸困难或临床状态变化：" + yesNoText(checked("dyspneaOrChange")),
         "",
-        "九、辅助评估建议",
+        "八、辅助评估建议",
         recommendations.map((text, index) => (index + 1) + ". " + text).join("\n"),
         "",
-        "十、围术期 MDT 麻醉会诊草稿",
+        "九、围术期 MDT 麻醉会诊草稿",
         mdtDraft,
         "",
-        "十一、免责声明",
+        "十、免责声明",
         DISCLAIMER
       ].join("\n");
 
