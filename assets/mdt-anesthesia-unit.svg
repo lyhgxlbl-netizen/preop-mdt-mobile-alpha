@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="麻醉设备插图">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#17345e"/><stop offset="1" stop-color="#8ea4cc"/></linearGradient></defs>
+  <rect width="128" height="128" rx="64" fill="url(#bg)"/>
+  <circle cx="64" cy="64" r="52" fill="none" stroke="#e7edf8" stroke-opacity=".22" stroke-width="2"/>
+  <g fill="none" stroke="#f4e2a5" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M47 38h34l7 24c2 8-4 15-12 15H52c-8 0-14-7-12-15z"/>
+    <path d="M51 52c8 5 18 5 26 0"/>
+    <path d="M64 77v12c0 8 7 14 15 14h8"/>
+    <path d="M87 103c8 0 14-6 14-14s-6-14-14-14"/>
+  </g>
+  <circle cx="64" cy="64" r="4" fill="#e7edf8"/>
+</svg>
