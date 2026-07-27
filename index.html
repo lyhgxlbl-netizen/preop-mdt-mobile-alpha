@@ -444,6 +444,125 @@
     .risk-layer:nth-child(2) { --layer-color: #4f7f8f; }
     .risk-layer:nth-child(3) { --layer-color: #9b7a36; }
 
+    .flip-card {
+      min-height: 390px;
+      overflow: visible;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      perspective: 1200px;
+    }
+
+    .flip-card::before {
+      display: none;
+    }
+
+    .flip-inner {
+      position: relative;
+      width: 100%;
+      min-height: 390px;
+      transform-style: preserve-3d;
+      transition: transform .55s cubic-bezier(.2,.75,.25,1);
+    }
+
+    .flip-card.is-flipped .flip-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-face {
+      position: absolute;
+      inset: 0;
+      overflow: auto;
+      padding: 14px;
+      border: 1px solid rgba(68,91,137,.22);
+      border-radius: 15px;
+      background: rgba(255,255,255,.94);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      box-shadow: 0 12px 30px rgba(18,39,77,.07);
+    }
+
+    .flip-face::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 4px;
+      background: var(--layer-color, #7690bd);
+    }
+
+    .flip-back {
+      transform: rotateY(180deg);
+      background:
+        radial-gradient(circle at 92% 8%, rgba(213,184,108,.16), transparent 9rem),
+        linear-gradient(180deg, #fbfcff, #f2f6fc);
+    }
+
+    .flip-button {
+      width: 100%;
+      min-height: 42px;
+      margin-top: 14px;
+      border: 1px solid rgba(68,91,137,.28);
+      border-radius: 11px;
+      background: #f2f5fa;
+      color: #203d6c;
+      box-shadow: none;
+      font-size: 13px;
+    }
+
+    .flip-button:hover {
+      transform: none;
+      box-shadow: none;
+      background: #e8eef8;
+    }
+
+    .method-list {
+      margin: 8px 0 0;
+      padding-left: 19px;
+      color: #31486f;
+      font-size: 13px;
+    }
+
+    .method-list li {
+      margin: 5px 0;
+    }
+
+    .rights-lock {
+      margin-top: 10px;
+      padding: 9px 10px;
+      border: 1px solid #e4d19f;
+      border-radius: 10px;
+      background: #fff9eb;
+      color: #6f5720;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .official-links {
+      display: grid;
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+    .official-links a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 40px;
+      padding: 8px 10px;
+      border: 1px solid rgba(68,91,137,.22);
+      border-radius: 10px;
+      background: #fff;
+      color: #17345e;
+      font-size: 12px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .official-links a::after {
+      content: "↗";
+      color: #8d712e;
+    }
+
     .layer-kicker {
       display: block;
       margin-bottom: 3px;
@@ -850,6 +969,11 @@
         grid-template-columns: 1fr;
       }
 
+      .flip-card,
+      .flip-inner {
+        min-height: 430px;
+      }
+
       .footer-note {
         padding-inline: 20px;
         font-size: 12px;
@@ -1022,40 +1146,101 @@
       </div>
 
       <div class="risk-track" aria-label="独立风险分层轨道">
-        <article class="risk-layer">
-          <span class="layer-kicker">Overall 30-day mortality</span>
-          <h3>SORT 总体30天死亡风险</h3>
-          <label>已获得的 SORT 风险
-            <input id="sortRisk" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="%">
-          </label>
-          <p class="layer-note">仅手工录入外部已获得结果；本系统不运行 SORT 算法。</p>
-        </article>
-
-        <article class="risk-layer">
-          <span class="layer-kicker">Functional capacity</span>
-          <h3>DASI 功能容量</h3>
-          <label>DASI 分数
-            <input id="dasiScore" type="number" min="0" max="58.2" step="0.1" inputmode="decimal" placeholder="0–58.2">
-          </label>
-          <p class="layer-note">录入已完成量表的总分；不在页面复制完整问卷或自动换算。</p>
-        </article>
-
-        <article class="risk-layer">
-          <span class="layer-kicker">Older-person frailty</span>
-          <h3>老年脆弱性</h3>
-          <div class="two">
-            <label>评估工具
-              <select id="frailtyTool">
-                <option value="">未选择</option>
-                <option value="CFS">CFS</option>
-                <option value="FRAIL">FRAIL</option>
-              </select>
-            </label>
-            <label>既有分数
-              <input id="frailtyScore" type="number" step="1" inputmode="numeric" placeholder="先选择工具" disabled>
-            </label>
+        <article id="sortCard" class="risk-layer flip-card">
+          <div class="flip-inner">
+            <div class="flip-face flip-front">
+              <span class="layer-kicker">Overall 30-day mortality</span>
+              <h3>SORT 总体30天死亡风险</h3>
+              <label>已获得的 SORT 风险
+                <input id="sortRisk" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="%">
+              </label>
+              <p class="layer-note">仅手工录入外部已获得结果；本系统不运行 SORT 算法。</p>
+              <button type="button" class="flip-button" aria-expanded="false" aria-controls="sortMethod" onclick="toggleRiskCard('sortCard', this)">翻转查看方法</button>
+            </div>
+            <div id="sortMethod" class="flip-face flip-back">
+              <span class="layer-kicker">Method / rights status</span>
+              <h3>SORT 方法与官方入口</h3>
+              <p class="layer-note">原始模型以术前六类变量估计成人非心脏手术后30天死亡风险：</p>
+              <ul class="method-list">
+                <li>ASA-PS 分级</li>
+                <li>手术紧急程度</li>
+                <li>高风险手术专科</li>
+                <li>手术严重程度</li>
+                <li>肿瘤手术</li>
+                <li>年龄 ≥65 岁</li>
+              </ul>
+              <div class="rights-lock">完整系数与计算逻辑尚未获得本产品复用授权；当前请使用官方计算器后回填结果。</div>
+              <div class="official-links">
+                <a href="https://sortsurgery.com/" target="_blank" rel="noopener noreferrer">打开 SORT 官方计算器</a>
+                <a href="https://www.ncepod.org.uk/sort.html" target="_blank" rel="noopener noreferrer">查看 NCEPOD SORT 资料</a>
+              </div>
+              <button type="button" class="flip-button" aria-expanded="true" aria-controls="sortMethod" onclick="toggleRiskCard('sortCard', this)">返回结果录入</button>
+            </div>
           </div>
-          <p id="frailtyHint" class="layer-note">请选择工具后录入由受训人员获得的既有分数。</p>
+        </article>
+
+        <article id="dasiCard" class="risk-layer flip-card">
+          <div class="flip-inner">
+            <div class="flip-face flip-front">
+              <span class="layer-kicker">Functional capacity</span>
+              <h3>DASI 功能容量</h3>
+              <label>DASI 分数
+                <input id="dasiScore" type="number" min="0" max="58.2" step="0.1" inputmode="decimal" placeholder="0–58.2">
+              </label>
+              <p class="layer-note">录入已完成量表的总分；不在页面复制完整问卷或自动换算。</p>
+              <button type="button" class="flip-button" aria-expanded="false" aria-controls="dasiMethod" onclick="toggleRiskCard('dasiCard', this)">翻转查看问卷状态</button>
+            </div>
+            <div id="dasiMethod" class="flip-face flip-back">
+              <span class="layer-kicker">Questionnaire / rights status</span>
+              <h3>DASI 问卷状态</h3>
+              <p class="layer-note">DASI 是12项自填式功能容量量表，总分范围为0–58.2。完整题项及计分权重属于受控量表内容。</p>
+              <div class="rights-lock">ePROVIDE 标示该工具由 Mark A. Hlatky 医师持有版权。未取得展示、中文翻译及软件计算许可前，网页仅保留合法分数录入。</div>
+              <div class="official-links">
+                <a href="https://eprovide.mapi-trust.org/instruments/duke-activity-status-index" target="_blank" rel="noopener noreferrer">查看 DASI 版权与许可记录</a>
+                <a href="https://doi.org/10.1016/0002-9149(89)90496-7" target="_blank" rel="noopener noreferrer">查看原始验证研究</a>
+              </div>
+              <button type="button" class="flip-button" aria-expanded="true" aria-controls="dasiMethod" onclick="toggleRiskCard('dasiCard', this)">返回分数录入</button>
+            </div>
+          </div>
+        </article>
+
+        <article id="frailtyCard" class="risk-layer flip-card">
+          <div class="flip-inner">
+            <div class="flip-face flip-front">
+              <span class="layer-kicker">Older-person frailty</span>
+              <h3>老年脆弱性</h3>
+              <div class="two">
+                <label>评估工具
+                  <select id="frailtyTool">
+                    <option value="">未选择</option>
+                    <option value="CFS">CFS</option>
+                    <option value="FRAIL">FRAIL</option>
+                  </select>
+                </label>
+                <label>既有分数
+                  <input id="frailtyScore" type="number" step="1" inputmode="numeric" placeholder="先选择工具" disabled>
+                </label>
+              </div>
+              <p id="frailtyHint" class="layer-note">请选择工具后录入由受训人员获得的既有分数。</p>
+              <button type="button" class="flip-button" aria-expanded="false" aria-controls="frailtyMethod" onclick="toggleRiskCard('frailtyCard', this)">翻转查看量表状态</button>
+            </div>
+            <div id="frailtyMethod" class="flip-face flip-back">
+              <span class="layer-kicker">Scale / rights status</span>
+              <h3>CFS / FRAIL 方法状态</h3>
+              <p id="frailtyMethodStatus" class="layer-note">选择工具后，返回此面查看对应方法状态。</p>
+              <ul class="method-list">
+                <li>CFS：临床判断型9级工具，需要结合基线活动、功能、认知和总体健康状态。</li>
+                <li>FRAIL：包含疲劳、阻力、行走、疾病数量和体重下降五个领域，计0–5分。</li>
+              </ul>
+              <div class="rights-lock">CFS 官方要求提交使用许可；FRAIL 中文译文和软件化题项也需完成权利人许可核查。当前不展示完整中文问卷或自动计分。</div>
+              <div class="official-links">
+                <a href="https://www.dal.ca/sites/gmr/our-tools/clinical-frailty-scale.html" target="_blank" rel="noopener noreferrer">查看 CFS 官方工具页面</a>
+                <a href="https://www.dal.ca/sites/gmr/our-tools/permission-for-use.html" target="_blank" rel="noopener noreferrer">提交 CFS 使用许可</a>
+                <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4515112/" target="_blank" rel="noopener noreferrer">查看 FRAIL 原始验证研究</a>
+              </div>
+              <button type="button" class="flip-button" aria-expanded="true" aria-controls="frailtyMethod" onclick="toggleRiskCard('frailtyCard', this)">返回工具选择</button>
+            </div>
+          </div>
         </article>
       </div>
 
@@ -1260,7 +1445,7 @@
   </main>
 
   <footer class="footer-note">
-    v0.7.0 Layered Assessment Alpha · AKB V2.1.1 · MDT Roundtable
+    v0.7.1 Rights-Gated Flip Cards · AKB V2.1.1 · MDT Roundtable
   </footer>
 
   <!-- JavaScript 数据与逻辑区 -->
@@ -1476,10 +1661,46 @@
       return bmi.toFixed(1);
     }
 
+    function setRiskCardState(card, flipped, moveFocus) {
+      const front = card.querySelector(".flip-front");
+      const back = card.querySelector(".flip-back");
+      card.classList.toggle("is-flipped", flipped);
+      front.setAttribute("aria-hidden", String(flipped));
+      back.setAttribute("aria-hidden", String(!flipped));
+      front.inert = flipped;
+      back.inert = !flipped;
+      card.querySelectorAll(".flip-button").forEach(button => {
+        button.setAttribute("aria-expanded", String(flipped));
+      });
+
+      if (moveFocus) {
+        const targetButton = flipped
+          ? back.querySelector(".flip-button")
+          : front.querySelector(".flip-button");
+        if (targetButton) targetButton.focus();
+      }
+    }
+
+    function toggleRiskCard(cardId) {
+      const selectedCard = $(cardId);
+      const willFlip = !selectedCard.classList.contains("is-flipped");
+      document.querySelectorAll(".flip-card").forEach(card => {
+        setRiskCardState(card, card === selectedCard ? willFlip : false, false);
+      });
+      setRiskCardState(selectedCard, willFlip, true);
+    }
+
+    function initializeRiskCards() {
+      document.querySelectorAll(".flip-card").forEach(card => {
+        setRiskCardState(card, false, false);
+      });
+    }
+
     function updateFrailtyInput() {
       const tool = value("frailtyTool");
       const scoreInput = $("frailtyScore");
       const hint = $("frailtyHint");
+      const methodStatus = $("frailtyMethodStatus");
 
       if (!tool) {
         scoreInput.disabled = true;
@@ -1489,6 +1710,7 @@
         scoreInput.placeholder = "先选择工具";
         hint.textContent = "请选择工具后录入由受训人员获得的既有分数。";
         hint.style.color = "";
+        methodStatus.textContent = "尚未选择工具；CFS 与 FRAIL 的方法和授权状态分别列于下方。";
         return;
       }
 
@@ -1507,6 +1729,9 @@
           ? tool + " " + score + " 分已记录；候选层不自动解释阈值。"
           : "分数超出 " + tool + " 可录入范围（" + scoreInput.min + "–" + scoreInput.max + "），请核对。";
       hint.style.color = inRange ? "" : "var(--red)";
+      methodStatus.textContent = tool === "CFS"
+        ? "当前选择 CFS：临床判断型9级工具；完整量表与中文版本须取得 Dalhousie 使用许可。"
+        : "当前选择 FRAIL：五领域、0–5分；完整中文题项与自动计分须完成权利人及译本许可核查。";
     }
 
     function layeredAssessment() {
@@ -1936,6 +2161,7 @@
       $("bmi").value = "";
       $("report").value = "";
       $("mdtDraft").value = "";
+      initializeRiskCards();
       updateAll();
     }
 
@@ -1960,7 +2186,10 @@
 
     document.addEventListener("input", handleFormChange);
     document.addEventListener("change", handleFormChange);
-    document.addEventListener("DOMContentLoaded", function () { updateAll(); });
+    document.addEventListener("DOMContentLoaded", function () {
+      initializeRiskCards();
+      updateAll();
+    });
   </script>
 </body>
 </html>

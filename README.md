@@ -1,9 +1,11 @@
 # 术前风险评估与 MDT 会诊工作台
 
-v0.7.0 Layered Assessment Alpha 的公开测试静态站点。
+v0.7.1 Rights-Gated Flip Cards 的公开测试静态站点。
 
 本页面仅用于教学和院内流程验证，不替代临床判断，不保存患者数据。公开测试不得输入真实可识别患者信息。
 
 医学知识状态：AKB V2.1.1，临床门禁 `locked_review_pending`。
 
 v0.7 加入独立的 SORT 外部结果、DASI、CFS/FRAIL 既有分数，以及 BNP/NT-proBNP、肌钙蛋白和 ECG 风险修饰因子记录。所有补充层仍为 `candidate/in_review`：不运行 SORT，不复制完整量表，不合并总分，也未启用新的自动临床规则。
+
+v0.7.1 加入可点击和键盘操作的翻转卡片。背面显示方法概要、官方入口和版权/许可状态；完整问卷、译文、计分权重及 SORT 模型系数继续保持锁定。
