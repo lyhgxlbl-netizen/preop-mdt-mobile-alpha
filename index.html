@@ -563,6 +563,74 @@
       color: #8d712e;
     }
 
+    .dasi-table-wrap {
+      margin-top: 10px;
+      overflow-x: auto;
+      border: 1px solid rgba(68,91,137,.22);
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    .dasi-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .dasi-table th,
+    .dasi-table td {
+      padding: 7px 8px;
+      border-bottom: 1px solid rgba(68,91,137,.14);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .dasi-table th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: #eaf0f9;
+      color: #17345e;
+      font-weight: 850;
+    }
+
+    .dasi-table td:first-child {
+      width: 26px;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .dasi-table td:last-child,
+    .dasi-table th:last-child {
+      width: 52px;
+      text-align: right;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+      font-weight: 800;
+    }
+
+    .dasi-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .formula-stack {
+      display: grid;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .formula-line {
+      padding: 8px 9px;
+      border-left: 3px solid #4f7f8f;
+      border-radius: 7px;
+      background: #eaf3f5;
+      color: #244b58;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 11px;
+      font-weight: 750;
+    }
+
     .layer-kicker {
       display: block;
       margin-bottom: 3px;
@@ -1192,9 +1260,35 @@
             </div>
             <div id="dasiMethod" class="flip-face flip-back">
               <span class="layer-kicker">Questionnaire / rights status</span>
-              <h3>DASI 问卷状态</h3>
-              <p class="layer-note">DASI 是12项自填式功能容量量表，总分范围为0–58.2。完整题项及计分权重属于受控量表内容。</p>
-              <div class="rights-lock">ePROVIDE 标示该工具由 Mark A. Hlatky 医师持有版权。未取得展示、中文翻译及软件计算许可前，网页仅保留合法分数录入。</div>
+              <h3>DASI 12项教学速览</h3>
+              <p class="layer-note">以下为便于查看的非官方中文转述，不是授权问卷，也不用于在本页正式施测或自动计分。</p>
+              <div class="dasi-table-wrap" role="region" aria-label="DASI十二项活动与研究权重速览" tabindex="0">
+                <table class="dasi-table">
+                  <thead>
+                    <tr><th>项</th><th>活动领域（非官方概述）</th><th>权重</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>1</td><td>独立进食、穿衣、洗澡或如厕等自我照护</td><td>2.75</td></tr>
+                    <tr><td>2</td><td>在住宅室内行走</td><td>1.75</td></tr>
+                    <tr><td>3</td><td>在平地连续步行约1–2个街区</td><td>2.75</td></tr>
+                    <tr><td>4</td><td>上一层楼或步行上坡</td><td>5.50</td></tr>
+                    <tr><td>5</td><td>短距离跑步</td><td>8.00</td></tr>
+                    <tr><td>6</td><td>完成轻家务，如简单清洁或洗餐具</td><td>2.70</td></tr>
+                    <tr><td>7</td><td>完成中等强度家务，如清扫或搬运日常物品</td><td>3.50</td></tr>
+                    <tr><td>8</td><td>完成重家务，如擦洗地面或搬动较重家具</td><td>8.00</td></tr>
+                    <tr><td>9</td><td>完成庭院劳动，如除草、耙叶或推割草机</td><td>4.50</td></tr>
+                    <tr><td>10</td><td>能够进行性生活</td><td>5.25</td></tr>
+                    <tr><td>11</td><td>参加中等强度娱乐或体育活动</td><td>6.00</td></tr>
+                    <tr><td>12</td><td>参加高强度体育活动</td><td>7.50</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="formula-stack" aria-label="DASI记分与功能容量估算">
+                <div class="formula-line">DASI总分 = 所有回答“能”的项目权重之和（0–58.2）</div>
+                <div class="formula-line">VO₂peak = 0.43 × DASI + 9.6 mL/kg/min</div>
+                <div class="formula-line">估算METs = VO₂peak ÷ 3.5</div>
+              </div>
+              <div class="rights-lock">本表仅为研究结构的非官方教学速览，不替代授权原版、正式中文译本或临床施测。页面继续只录入已合法获得的DASI总分。</div>
               <div class="official-links">
                 <a href="https://eprovide.mapi-trust.org/instruments/duke-activity-status-index" target="_blank" rel="noopener noreferrer">查看 DASI 版权与许可记录</a>
                 <a href="https://doi.org/10.1016/0002-9149(89)90496-7" target="_blank" rel="noopener noreferrer">查看原始验证研究</a>
@@ -1445,7 +1539,7 @@
   </main>
 
   <footer class="footer-note">
-    v0.7.1 Rights-Gated Flip Cards · AKB V2.1.1 · MDT Roundtable
+    v0.7.2 DASI Teaching Overview · AKB V2.1.1 · MDT Roundtable
   </footer>
 
   <!-- JavaScript 数据与逻辑区 -->
@@ -1454,7 +1548,7 @@
     // OPC-AKB-SNAPSHOT:START
     const OPC_KNOWLEDGE_SNAPSHOT = {
           "version": "AKB V2.1.1 / OPC Self-Growing Knowledge Loop",
-          "snapshotDate": "2026-07-27",
+          "snapshotDate": "2026-07-28",
           "generatedBy": "tools/akb_iteration_engine.py",
           "canonicalStore": "Obsidian AKB Markdown",
           "knowledgeHash": "fa485ce8a45a088668f51eb9",
