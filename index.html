@@ -979,6 +979,83 @@
       font-weight: 750;
     }
 
+    .respiratory-layer {
+      overflow: hidden;
+      border-top: 4px solid #4f7f8f;
+      background:
+        radial-gradient(circle at 96% 4%, rgba(110,170,183,.16), transparent 16rem),
+        rgba(252,254,255,.96);
+    }
+
+    .respiratory-band {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(220px, .9fr);
+      gap: 12px;
+      margin-top: 12px;
+      padding: 13px;
+      border: 1px solid rgba(79,127,143,.25);
+      border-radius: 14px;
+      background: linear-gradient(115deg, #edf6f7, #f8fbfd);
+    }
+
+    .respiratory-band h3 {
+      margin: 0 0 7px;
+      color: #244b58;
+    }
+
+    .respiratory-band p {
+      margin: 0;
+      color: #4d6872;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .respiratory-status {
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+      padding: 10px 12px;
+      border-left: 3px solid #4f7f8f;
+      border-radius: 10px;
+      background: rgba(255,255,255,.82);
+      color: #244b58;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .resp-test-panel {
+      margin-top: 12px;
+      border: 1px solid rgba(79,127,143,.24);
+      border-radius: 13px;
+      background: #f8fbfc;
+    }
+
+    .resp-test-panel summary {
+      min-height: 48px;
+      padding: 13px 14px;
+      color: #244b58;
+      font-weight: 850;
+      cursor: pointer;
+    }
+
+    .resp-test-body {
+      padding: 0 14px 14px;
+      border-top: 1px solid rgba(79,127,143,.16);
+    }
+
+    .resp-learning-prompt {
+      margin-top: 12px;
+      padding: 13px;
+      border: 1px dashed rgba(79,127,143,.42);
+      border-radius: 13px;
+      background: #f1f8f8;
+    }
+
+    .resp-learning-prompt h3 {
+      margin-top: 0;
+      color: #244b58;
+    }
+
     details.activity-context {
       margin-top: 14px;
       border-top: 1px solid var(--line);
@@ -1338,6 +1415,10 @@
 
       .teacher-score-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .respiratory-band {
+        grid-template-columns: 1fr;
       }
 
       body.mobile-flow-ready main > .card[data-mobile-step]:not(.is-mobile-step-active) {
@@ -1874,6 +1955,140 @@
       <div id="creatinineStatus" class="pill" style="margin-top: 12px;" role="status" aria-live="polite">肌酐 &gt;177 μmol/L：未判断</div>
     </section>
 
+    <section id="respiratorySection" class="card respiratory-layer" aria-labelledby="respiratory-title" data-mobile-step="3">
+      <p class="eyebrow">Candidate / in_review · Respiratory reserve</p>
+      <h2 id="respiratory-title">5A. 呼吸风险补充层</h2>
+      <p class="hint">先识别症状、近期变化与呼吸支持，再判断是否需要肺功能或动脉血气。两项检查均不是所有患者的术前常规必查项目。</p>
+
+      <div class="respiratory-band">
+        <div>
+          <h3>先问“是否会改变管理”</h3>
+          <p>本层只记录已有信息和学员推理，不自动判定检查指征，不以单项数值决定手术、麻醉方式或术后去向。</p>
+        </div>
+        <div id="respiratorySummary" class="respiratory-status" role="status" aria-live="polite">尚未记录呼吸基础筛查。</div>
+      </div>
+
+      <h3>基础呼吸筛查</h3>
+      <div class="two">
+        <label>静息 SpO₂
+          <input id="restingSpo2" type="number" min="0" max="100" step="1" inputmode="numeric" placeholder="%（同时记录吸氧情况）">
+        </label>
+        <label>测量时氧疗条件
+          <input id="spo2OxygenContext" type="text" placeholder="如：室内空气、鼻导管 2 L/min">
+        </label>
+        <label>当前呼吸状态相对基线
+          <select id="respiratoryBaseline">
+            <option value="">未评估</option>
+            <option value="稳定">稳定</option>
+            <option value="较基线恶化">较基线恶化</option>
+            <option value="疑似急性加重或感染">疑似急性加重或感染</option>
+          </select>
+        </label>
+        <label>最近一次呼吸专科评估
+          <input id="respiratoryReview" type="text" placeholder="日期/结论；没有则填未评估">
+        </label>
+      </div>
+      <div class="checkbox-grid" style="margin-top: 12px;">
+        <label class="check"><input id="respCopd" type="checkbox">COPD或疑似慢性气流受限</label>
+        <label class="check"><input id="respAsthma" type="checkbox">哮喘或气道高反应</label>
+        <label class="check"><input id="respIld" type="checkbox">间质性肺病/限制性肺病</label>
+        <label class="check"><input id="respOsa" type="checkbox">OSA或疑似睡眠呼吸障碍</label>
+        <label class="check"><input id="respPulmonaryHypertension" type="checkbox">肺动脉高压/右心负荷问题</label>
+        <label class="check"><input id="respRecentInfection" type="checkbox">近期呼吸道感染或急性加重</label>
+        <label class="check"><input id="respHomeOxygen" type="checkbox">家庭氧疗</label>
+        <label class="check"><input id="respHomeNiv" type="checkbox">家庭 CPAP/BiPAP/NIV</label>
+      </div>
+
+      <details class="resp-test-panel">
+        <summary>按需展开：肺功能既有结果</summary>
+        <div class="resp-test-body">
+          <p class="hint">用于已知/疑似呼吸疾病、基线不清或结果可能改变优化和资源计划的情境。当前不自动解释阈值。</p>
+          <div class="two">
+            <label>肺功能状态
+              <select id="pftStatus">
+                <option value="未评估">未评估</option>
+                <option value="当前无明确检查指征">当前无明确检查指征</option>
+                <option value="建议结合临床由上级判断">建议结合临床由上级判断</option>
+                <option value="已有结果">已有结果</option>
+              </select>
+            </label>
+            <label>检查日期
+              <input id="pftDate" type="date">
+            </label>
+            <label>FEV₁
+              <input id="pftFev1" type="number" min="0" step="0.01" inputmode="decimal" placeholder="L">
+            </label>
+            <label>FVC
+              <input id="pftFvc" type="number" min="0" step="0.01" inputmode="decimal" placeholder="L">
+            </label>
+            <label>FEV₁/FVC
+              <input id="pftRatio" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="%">
+            </label>
+            <label>DLCO
+              <input id="pftDlco" type="number" min="0" step="0.1" inputmode="decimal" placeholder="% predicted">
+            </label>
+          </div>
+          <label>肺功能本地报告结论/质量说明
+            <textarea id="pftInterpretation" placeholder="记录正式报告结论、检查质量和限制；不要由页面自行诊断。"></textarea>
+          </label>
+        </div>
+      </details>
+
+      <details class="resp-test-panel">
+        <summary>按需展开：动脉血气既有结果</summary>
+        <div class="resp-test-body">
+          <p class="hint">血气主要用于回答氧合、通气或酸碱问题；必须同时记录采样时的氧疗条件。当前不自动解释异常。</p>
+          <div class="two">
+            <label>血气状态
+              <select id="abgStatus">
+                <option value="未评估">未评估</option>
+                <option value="当前无明确检查指征">当前无明确检查指征</option>
+                <option value="建议结合临床由上级判断">建议结合临床由上级判断</option>
+                <option value="已有结果">已有结果</option>
+              </select>
+            </label>
+            <label>采样时氧疗条件
+              <input id="abgOxygenContext" type="text" placeholder="如：室内空气、FiO₂、氧流量">
+            </label>
+            <label>pH
+              <input id="abgPh" type="number" min="6.5" max="8" step="0.01" inputmode="decimal" placeholder="例如 7.40">
+            </label>
+            <label>PaCO₂
+              <input id="abgPaco2" type="number" min="0" step="0.1" inputmode="decimal" placeholder="mmHg">
+            </label>
+            <label>PaO₂
+              <input id="abgPao2" type="number" min="0" step="0.1" inputmode="decimal" placeholder="mmHg">
+            </label>
+            <label>HCO₃⁻
+              <input id="abgHco3" type="number" min="0" step="0.1" inputmode="decimal" placeholder="mmol/L">
+            </label>
+            <label>乳酸
+              <input id="abgLactate" type="number" min="0" step="0.1" inputmode="decimal" placeholder="mmol/L">
+            </label>
+          </div>
+          <label>血气本地报告结论/临床解释
+            <textarea id="abgInterpretation" placeholder="结合采样条件、病程和本院参考范围记录；页面不自动诊断。"></textarea>
+          </label>
+        </div>
+      </details>
+
+      <div class="resp-learning-prompt">
+        <h3>学员推理：检查不是目的</h3>
+        <div class="two">
+          <label>为什么需要或不需要肺功能/血气？
+            <textarea id="respTestRationale" placeholder="结合症状、基线、手术类型和预期管理改变说明。"></textarea>
+          </label>
+          <label>结果将改变什么？
+            <textarea id="respManagementImpact" placeholder="如进一步优化、麻醉计划、术后监护或呼吸支持准备。"></textarea>
+          </label>
+          <label>是否需要呼吸科/重症 MDT？
+            <textarea id="respMdtQuestion" placeholder="没有明确问题时说明不需要；有问题时写成可回答的会诊问题。"></textarea>
+          </label>
+        </div>
+      </div>
+      <div class="rights-lock">边界：本层为 KC-2026-011 / IA-2026-004 `candidate/in_review`。不常规要求肺功能或血气，不自动解释阈值，不自动转诊或决定手术。</div>
+    </section>
+
     <section id="rcriSection" class="card" aria-labelledby="rcri-title" data-mobile-step="2">
       <h2 id="rcri-title">6. RCRI 教学评分</h2>
       <p class="hint">勾选 RCRI 评分项目后自动计算总分；上方手术信息、心脏病史和肌酐结果也会同步勾选对应项目。</p>
@@ -2028,7 +2243,7 @@
       <div id="traineeSubmissionSnapshot" class="small-note submission-snapshot">尚无提交快照。</div>
 
       <div class="teacher-scorecard">
-        <h3>四维观察评分</h3>
+        <h3>五维观察评分</h3>
         <div class="teacher-score-grid">
           <label>信息完整性
             <select id="teacherInfoScore">
@@ -2070,6 +2285,16 @@
               <option value="5">5 能推动闭环</option>
             </select>
           </label>
+          <label>呼吸风险识别
+            <select id="teacherRespiratoryScore">
+              <option value="">未评分</option>
+              <option value="1">1 需直接指导</option>
+              <option value="2">2 忽略关键线索</option>
+              <option value="3">3 能完成基础筛查</option>
+              <option value="4">4 检查选择较合理</option>
+              <option value="5">5 能联系管理影响</option>
+            </select>
+          </label>
         </div>
         <div class="two" style="margin-top: 12px;">
           <label>建议监督级别
@@ -2109,7 +2334,7 @@
   </div>
 
   <footer class="footer-note">
-    v0.9.0 Training Review Mode · AKB V2.1.1 · MDT Roundtable
+    v0.10.0 Respiratory Candidate Layer · AKB V2.1.1 · MDT Roundtable
   </footer>
 
   <!-- JavaScript 数据与逻辑区 -->
@@ -2205,6 +2430,20 @@
                       "role": "取消 ACS-NSQIP 与 RCRI/SORT/DASI/CFS/BNP 候选层影响评估"
                 },
                 {
+                      "id": "KC-2026-011",
+                      "note": "[[Knowledge_Candidate_Preoperative_Respiratory_Risk_Layer]]",
+                      "status": "in_review",
+                      "evidence": "unreviewed",
+                      "role": "术前呼吸风险补充层候选方案"
+                },
+                {
+                      "id": "IA-2026-004",
+                      "note": "[[Impact_Assessment_Preoperative_Respiratory_Risk_Layer]]",
+                      "status": "in_review",
+                      "evidence": "unreviewed",
+                      "role": "术前呼吸风险补充层影响评估"
+                },
+                {
                       "id": "AKB-INDEX-GUIDELINE",
                       "note": "[[Guideline_Index]]",
                       "status": "active",
@@ -2236,12 +2475,12 @@
       troponinMonitor: "中高危患者可考虑围术期 Troponin 监测。",
       echo: "Echo：心衰、瓣膜病、呼吸困难、LVEF 低或临床状态变化时，提示考虑心超评估。",
       cied: "起搏器/ICD：建议术前明确设备类型、起搏依赖、最近程控情况和电磁干扰管理方案。",
-      layeredBoundary: "SORT、DASI、CFS/FRAIL 与风险修饰因子为相互独立的候选层；当前仅用于结构化记录和人工综合判断，不自动相加、不生成新的临床阈值或综合总分。",
+      layeredBoundary: "SORT、DASI、CFS/FRAIL、风险修饰因子与呼吸风险补充层相互独立；当前仅用于结构化记录和人工综合判断，不自动相加、不生成新的临床阈值或综合总分。",
       lowSignal: "目前未识别出明确高危提示；仍需结合病史、体格检查、指南和临床判断综合评估。"
     };
     const MDT_EVIDENCE = {
       status: "in_review/context_only",
-      sources: "AKB-GUIDELINE-015、032–037；AKB-LIT-035–041；AKB-CASE-001–004；KC-2026-009",
+      sources: "AKB-GUIDELINE-015、032–037；AKB-LIT-035–041；AKB-CASE-001–004；KC-2026-009；KC-2026-011",
       boundary: "仅支持信息整合、会诊文书、任务闭环和共享决策；不自动触发会诊，不判定能否手术，不生成治疗处方。"
     };
     const RCRI_ITEMS = [
@@ -2374,10 +2613,11 @@
     function buildTraineeSubmissionSnapshot() {
       const rcri = calculateRCRI();
       const layers = layeredAssessment();
+      const respiratory = respiratoryAssessment();
       return [
         "学员术前评估提交快照",
         "提交时间：" + new Date().toLocaleString("zh-CN", { hour12: false }),
-        "产品版本：v0.9.0 / AKB V2.1.1 / " + OPC_KNOWLEDGE_SNAPSHOT.knowledgeHash,
+        "产品版本：v0.10.0 / AKB V2.1.1 / " + OPC_KNOWLEDGE_SNAPSHOT.knowledgeHash,
         "",
         "病例范围",
         "年龄/性别：" + (value("age") || "未填写") + " / " + (value("sex") || "未填写"),
@@ -2389,6 +2629,16 @@
         "SORT：" + (layers.sortRisk === null ? "未录入" : layers.sortRisk + "%"),
         "DASI：" + (layers.dasiScore === null ? "未录入" : layers.dasiScore + " 分"),
         "脆弱性：" + (!layers.frailtyTool ? "未选择" : layers.frailtyTool + " " + (layers.frailtyScore === null ? "未录入" : layers.frailtyScore + " 分")),
+        "",
+        "呼吸风险补充层（candidate/in_review）",
+        "静息SpO₂/测量条件：" + (respiratory.spo2 === null ? "未录入" : respiratory.spo2 + "%") + " / " + (value("spo2OxygenContext") || "未记录"),
+        "呼吸基线：" + (respiratory.baseline || "未评估"),
+        "呼吸线索：" + (respiratory.conditions.length ? respiratory.conditions.join("、") : "未勾选"),
+        "肺功能：" + pulmonaryFunctionText(respiratory),
+        "动脉血气：" + arterialBloodGasText(respiratory),
+        "检查选择理由：" + (value("respTestRationale") || "未填写"),
+        "预期管理影响：" + (value("respManagementImpact") || "未填写"),
+        "呼吸/重症MDT问题：" + (value("respMdtQuestion") || "未填写"),
         "",
         "学员风险判断与依据",
         value("traineeJudgment"),
@@ -2464,7 +2714,8 @@
         numberValue("teacherInfoScore"),
         numberValue("teacherReasoningScore"),
         numberValue("teacherPlanScore"),
-        numberValue("teacherCommunicationScore")
+        numberValue("teacherCommunicationScore"),
+        numberValue("teacherRespiratoryScore")
       ].filter(score => score !== null);
       const average = numericScores.length
         ? (numericScores.reduce((sum, score) => sum + score, 0) / numericScores.length).toFixed(1)
@@ -2475,11 +2726,12 @@
         "评价时间：" + new Date().toLocaleString("zh-CN", { hour12: false }),
         "评价依据：学员提交快照；本评价不自动判定合格。",
         "",
-        "四维观察",
+        "五维观察",
         "信息完整性：" + teacherScoreText("teacherInfoScore"),
         "风险推理：" + teacherScoreText("teacherReasoningScore"),
         "计划合理性：" + teacherScoreText("teacherPlanScore"),
         "沟通与MDT：" + teacherScoreText("teacherCommunicationScore"),
+        "呼吸风险识别：" + teacherScoreText("teacherRespiratoryScore"),
         "已评分维度平均值：" + average + (numericScores.length ? "/5（仅作形成性趋势参考）" : ""),
         "建议监督级别：" + (value("teacherSupervision") || "未选择"),
         "",
@@ -2702,6 +2954,80 @@
       return measurement + "；本地解释：" + localInterpretation;
     }
 
+    function respiratoryAssessment() {
+      const conditionFields = [
+        ["COPD/慢性气流受限", "respCopd"],
+        ["哮喘/气道高反应", "respAsthma"],
+        ["间质性/限制性肺病", "respIld"],
+        ["OSA/睡眠呼吸障碍", "respOsa"],
+        ["肺动脉高压/右心负荷", "respPulmonaryHypertension"],
+        ["近期感染或急性加重", "respRecentInfection"],
+        ["家庭氧疗", "respHomeOxygen"],
+        ["家庭CPAP/BiPAP/NIV", "respHomeNiv"]
+      ];
+      const conditions = conditionFields.filter(([_, id]) => checked(id)).map(([label]) => label);
+      const spo2 = numberValue("restingSpo2");
+      const spo2Valid = spo2 === null || (spo2 >= 0 && spo2 <= 100);
+      const baseline = value("respiratoryBaseline");
+      const pftStatus = value("pftStatus");
+      const abgStatus = value("abgStatus");
+      const recorded = spo2 !== null || baseline || conditions.length ||
+        pftStatus !== "未评估" || abgStatus !== "未评估" ||
+        value("respTestRationale") || value("respManagementImpact") || value("respMdtQuestion");
+
+      const summary = $("respiratorySummary");
+      if (!recorded) {
+        summary.textContent = "尚未记录呼吸基础筛查。";
+      } else {
+        summary.textContent = [
+          "SpO₂：" + (spo2 === null ? "未录入" : spo2Valid ? spo2 + "%" : "请核对范围"),
+          "基线：" + (baseline || "未评估"),
+          "呼吸线索：" + (conditions.length ? conditions.length + "项" : "未勾选"),
+          "肺功能：" + pftStatus,
+          "血气：" + abgStatus
+        ].join(" · ");
+      }
+      summary.style.borderLeftColor = spo2Valid ? "" : "var(--red)";
+
+      return { conditions, spo2, spo2Valid, baseline, pftStatus, abgStatus };
+    }
+
+    function pulmonaryFunctionText(respiratory = respiratoryAssessment()) {
+      const fev1 = numberValue("pftFev1");
+      const fvc = numberValue("pftFvc");
+      const ratio = numberValue("pftRatio");
+      const dlco = numberValue("pftDlco");
+      const values = [
+        fev1 === null ? "" : "FEV₁ " + fev1 + " L",
+        fvc === null ? "" : "FVC " + fvc + " L",
+        ratio === null ? "" : "FEV₁/FVC " + ratio + "%",
+        dlco === null ? "" : "DLCO " + dlco + "% predicted"
+      ].filter(Boolean);
+      return respiratory.pftStatus +
+        "；日期：" + (value("pftDate") || "未记录") +
+        "；数值：" + (values.length ? values.join("，") : "未录入") +
+        "；本地结论：" + (value("pftInterpretation") || "未填写");
+    }
+
+    function arterialBloodGasText(respiratory = respiratoryAssessment()) {
+      const ph = numberValue("abgPh");
+      const paco2 = numberValue("abgPaco2");
+      const pao2 = numberValue("abgPao2");
+      const hco3 = numberValue("abgHco3");
+      const lactate = numberValue("abgLactate");
+      const values = [
+        ph === null ? "" : "pH " + ph,
+        paco2 === null ? "" : "PaCO₂ " + paco2 + " mmHg",
+        pao2 === null ? "" : "PaO₂ " + pao2 + " mmHg",
+        hco3 === null ? "" : "HCO₃⁻ " + hco3 + " mmol/L",
+        lactate === null ? "" : "乳酸 " + lactate + " mmol/L"
+      ].filter(Boolean);
+      return respiratory.abgStatus +
+        "；采样/氧疗条件：" + (value("abgOxygenContext") || "未记录") +
+        "；数值：" + (values.length ? values.join("，") : "未录入") +
+        "；本地结论：" + (value("abgInterpretation") || "未填写");
+    }
+
     function isCreatinineHigh() {
       const creatinine = numberValue("creatinine");
       return creatinine !== null && creatinine > 177;
@@ -2915,6 +3241,7 @@
       const triggers = collectMdtTriggers();
       const signals = mdtCandidateSignals();
       const layers = layeredAssessment();
+      const respiratory = respiratoryAssessment();
       const draft = [
         "围术期 MDT 麻醉会诊草稿（非自动临床决定）",
         "",
@@ -2928,6 +3255,12 @@
           "；DASI " + (layers.dasiScore === null ? "未录入" : layers.dasiScore + " 分") +
           "；脆弱性 " + (!layers.frailtyTool ? "未选择" : layers.frailtyTool + " " + (layers.frailtyScore === null ? "未录入" : layers.frailtyScore + " 分")),
         "风险修饰因子：ECG " + value("ecg") + "；" + natriureticText() + "；肌钙蛋白 " + value("troponin"),
+        "呼吸风险补充层（candidate/in_review）：SpO₂ " + (respiratory.spo2 === null ? "未录入" : respiratory.spo2 + "%") +
+          "；基线 " + (respiratory.baseline || "未评估") +
+          "；呼吸线索 " + (respiratory.conditions.length ? respiratory.conditions.join("、") : "未勾选"),
+        "肺功能：" + pulmonaryFunctionText(respiratory),
+        "动脉血气：" + arterialBloodGasText(respiratory),
+        "呼吸/重症MDT问题：" + (value("respMdtQuestion") || "未填写"),
         "",
         "二、患者目标与共享决策",
         value("mdtPatientGoals") || "未填写患者目标、价值观、不能接受的结局与决策偏好",
@@ -3005,6 +3338,7 @@
       const creatinine = value("creatinine");
       const mdtDraft = generateMdtDraft();
       const layers = layeredAssessment();
+      const respiratory = respiratoryAssessment();
 
       const report = [
         "心脏病患者接受非心脏手术术前麻醉评估报告",
@@ -3054,13 +3388,25 @@
         "是否肌酐 >177 μmol/L：" + (creatinine ? yesNoText(isCreatinineHigh()) : "未判断"),
         "呼吸困难或临床状态变化：" + yesNoText(checked("dyspneaOrChange")),
         "",
-        "九、辅助评估建议",
+        "九、呼吸风险补充层（candidate/in_review）",
+        "静息SpO₂/测量条件：" + (respiratory.spo2 === null ? "未录入" : respiratory.spo2 + "%") + " / " + (value("spo2OxygenContext") || "未记录"),
+        "当前呼吸状态相对基线：" + (respiratory.baseline || "未评估"),
+        "呼吸疾病与支持线索：" + (respiratory.conditions.length ? respiratory.conditions.join("、") : "未勾选"),
+        "最近呼吸专科评估：" + (value("respiratoryReview") || "未记录"),
+        "肺功能：" + pulmonaryFunctionText(respiratory),
+        "动脉血气：" + arterialBloodGasText(respiratory),
+        "学员检查选择理由：" + (value("respTestRationale") || "未填写"),
+        "预期管理影响：" + (value("respManagementImpact") || "未填写"),
+        "呼吸/重症MDT问题：" + (value("respMdtQuestion") || "未填写"),
+        "边界：肺功能和血气不是所有患者常规必查；本系统不自动解释阈值或作出手术决定。",
+        "",
+        "十、辅助评估建议",
         reportRecommendations.map((text, index) => (index + 1) + ". " + text).join("\n"),
         "",
-        "十、围术期 MDT 麻醉会诊草稿",
+        "十一、围术期 MDT 麻醉会诊草稿",
         mdtDraft,
         "",
-        "十一、免责声明",
+        "十二、免责声明",
         DISCLAIMER
       ].join("\n");
 
@@ -3129,6 +3475,7 @@
       calculateBMI();
       updateFrailtyInput();
       layeredAssessment();
+      respiratoryAssessment();
       updateCreatinineStatus();
       syncRCRIItems();
       calculateRCRI();
