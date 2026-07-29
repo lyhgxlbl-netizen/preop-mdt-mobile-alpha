@@ -564,7 +564,8 @@
     }
 
     .dasi-table-wrap,
-    .sort-table-wrap {
+    .sort-table-wrap,
+    .frailty-table-wrap {
       margin-top: 10px;
       overflow-x: auto;
       border: 1px solid rgba(68,91,137,.22);
@@ -573,7 +574,8 @@
     }
 
     .dasi-table,
-    .sort-table {
+    .sort-table,
+    .frailty-table {
       width: 100%;
       border-collapse: collapse;
       font-size: 11px;
@@ -583,7 +585,9 @@
     .dasi-table th,
     .dasi-table td,
     .sort-table th,
-    .sort-table td {
+    .sort-table td,
+    .frailty-table th,
+    .frailty-table td {
       padding: 7px 8px;
       border-bottom: 1px solid rgba(68,91,137,.14);
       text-align: left;
@@ -591,7 +595,8 @@
     }
 
     .dasi-table th,
-    .sort-table th {
+    .sort-table th,
+    .frailty-table th {
       position: sticky;
       top: 0;
       z-index: 1;
@@ -616,7 +621,8 @@
     }
 
     .dasi-table tr:last-child td,
-    .sort-table tr:last-child td {
+    .sort-table tr:last-child td,
+    .frailty-table tr:last-child td {
       border-bottom: 0;
     }
 
@@ -632,6 +638,51 @@
       white-space: nowrap;
       font-variant-numeric: tabular-nums;
       font-weight: 850;
+    }
+
+    .frailty-method {
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid rgba(68,91,137,.18);
+      border-radius: 12px;
+      background: rgba(255,255,255,.72);
+      transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    .frailty-method.is-selected {
+      border-color: #b28a32;
+      background: #fffaf0;
+      box-shadow: 0 0 0 3px rgba(178,138,50,.12);
+    }
+
+    .frailty-method h4 {
+      margin: 0;
+      color: #17345e;
+      font-size: 13px;
+    }
+
+    .frailty-method > p {
+      margin: 6px 0 0;
+      color: #4d6287;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .frailty-table {
+      min-width: 440px;
+    }
+
+    .frailty-table td:first-child {
+      width: 56px;
+      color: #31486f;
+      font-weight: 850;
+    }
+
+    .frailty-table td:last-child,
+    .frailty-table th:last-child {
+      width: 76px;
+      white-space: nowrap;
+      font-weight: 800;
     }
 
     .formula-stack {
@@ -1368,14 +1419,48 @@
               <button type="button" class="flip-button" aria-expanded="false" aria-controls="frailtyMethod" onclick="toggleRiskCard('frailtyCard', this)">翻转查看量表状态</button>
             </div>
             <div id="frailtyMethod" class="flip-face flip-back">
-              <span class="layer-kicker">Scale / rights status</span>
-              <h3>CFS / FRAIL 方法状态</h3>
+              <span class="layer-kicker">Non-official teaching overview</span>
+              <h3>CFS / FRAIL 教学速览</h3>
               <p id="frailtyMethodStatus" class="layer-note">选择工具后，返回此面查看对应方法状态。</p>
-              <ul class="method-list">
-                <li>CFS：临床判断型9级工具，需要结合基线活动、功能、认知和总体健康状态。</li>
-                <li>FRAIL：包含疲劳、阻力、行走、疾病数量和体重下降五个领域，计0–5分。</li>
-              </ul>
-              <div class="rights-lock">CFS 官方要求提交使用许可；FRAIL 中文译文和软件化题项也需完成权利人许可核查。当前不展示完整中文问卷或自动计分。</div>
+              <div id="cfsTeaching" class="frailty-method" data-frailty-method="CFS">
+                <h4>CFS：整体临床判断（1–9级）</h4>
+                <p>以下为便于理解层级差异的非官方转述。CFS不是逐项相加的问卷；应由受训人员结合急性事件前约2周的活动、功能、认知与健康状态作整体判断。</p>
+                <div class="frailty-table-wrap" role="region" aria-label="CFS一至九级非官方教学概述" tabindex="0">
+                  <table class="frailty-table">
+                    <thead><tr><th>级别</th><th>非官方教学概述</th><th>功能线索</th></tr></thead>
+                    <tbody>
+                      <tr><td>1</td><td>非常健壮，规律且较积极地运动</td><td>独立、活跃</td></tr>
+                      <tr><td>2</td><td>健康状况良好，无明显活动受限，但活跃程度低于1级</td><td>独立</td></tr>
+                      <tr><td>3</td><td>慢性病控制稳定，日常独立，常规运动较少</td><td>独立</td></tr>
+                      <tr><td>4</td><td>活动变慢或症状限制增多，通常仍能独立生活</td><td>非常轻度</td></tr>
+                      <tr><td>5</td><td>较复杂的工具性日常活动开始需要帮助</td><td>轻度依赖</td></tr>
+                      <tr><td>6</td><td>外出、家务等普遍需要帮助，部分个人照护可能需协助</td><td>中度依赖</td></tr>
+                      <tr><td>7</td><td>个人照护完全依赖，但总体病情相对稳定</td><td>重度依赖</td></tr>
+                      <tr><td>8</td><td>完全依赖且接近生命末期，轻微疾病后恢复能力很低</td><td>极重度</td></tr>
+                      <tr><td>9</td><td>预期寿命不足6个月的终末期状态，不要求同时满足其他衰弱特征</td><td>终末期</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p><strong>使用边界：</strong>不把CFS作为患者自填清单，也不凭单一高分自动作出取消手术或限制治疗决定。</p>
+              </div>
+              <div id="frailTeaching" class="frailty-method" data-frailty-method="FRAIL">
+                <h4>FRAIL：五领域快速筛查（0–5分）</h4>
+                <p>每个阳性领域计1分；下表为研究结构的教学性转述，不是经授权的正式中文问卷。</p>
+                <div class="frailty-table-wrap" role="region" aria-label="FRAIL五领域非官方教学概述" tabindex="0">
+                  <table class="frailty-table">
+                    <thead><tr><th>领域</th><th>教学性阳性条件</th><th>计分</th></tr></thead>
+                    <tbody>
+                      <tr><td>F 疲劳</td><td>过去4周内大部分或全部时间感到疲倦</td><td>阳性 +1</td></tr>
+                      <tr><td>R 阻力</td><td>独立连续上10级台阶有困难</td><td>阳性 +1</td></tr>
+                      <tr><td>A 行走</td><td>独立步行数百码有困难</td><td>阳性 +1</td></tr>
+                      <tr><td>I 疾病</td><td>预设慢性疾病清单中达到5种或以上</td><td>阳性 +1</td></tr>
+                      <tr><td>L 体重下降</td><td>过去12个月体重下降达到5%或以上</td><td>阳性 +1</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p><strong>原研究分层：</strong>0分为健壮，1–2分为衰弱前期，3–5分为衰弱；本页不依据分层自动生成临床建议。</p>
+              </div>
+              <div class="rights-lock">CFS 与 FRAIL 不是等价工具：前者是整体临床判断，后者是快速身体衰弱筛查。CFS 官方使用许可、FRAIL 中文译本与软件化权限仍待核查；本页不复制官方图示或正式译文，也不自动计分。</div>
               <div class="official-links">
                 <a href="https://www.dal.ca/sites/gmr/our-tools/clinical-frailty-scale.html" target="_blank" rel="noopener noreferrer">查看 CFS 官方工具页面</a>
                 <a href="https://www.dal.ca/sites/gmr/our-tools/permission-for-use.html" target="_blank" rel="noopener noreferrer">提交 CFS 使用许可</a>
@@ -1588,7 +1673,7 @@
   </main>
 
   <footer class="footer-note">
-    v0.7.3 SORT Teaching Overview · AKB V2.1.1 · MDT Roundtable
+    v0.7.4 Frailty Teaching Overview · AKB V2.1.1 · MDT Roundtable
   </footer>
 
   <!-- JavaScript 数据与逻辑区 -->
@@ -1844,6 +1929,9 @@
       const scoreInput = $("frailtyScore");
       const hint = $("frailtyHint");
       const methodStatus = $("frailtyMethodStatus");
+      document.querySelectorAll("[data-frailty-method]").forEach(section => {
+        section.classList.toggle("is-selected", Boolean(tool) && section.dataset.frailtyMethod === tool);
+      });
 
       if (!tool) {
         scoreInput.disabled = true;
