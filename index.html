@@ -710,6 +710,118 @@
       white-space: nowrap;
     }
 
+    .mobile-flow-nav,
+    .mobile-flow-actions {
+      display: none;
+    }
+
+    .mobile-flow-nav {
+      border-bottom: 1px solid rgba(68,91,137,.18);
+      background: rgba(247,250,255,.96);
+      box-shadow: 0 10px 24px rgba(18,39,77,.08);
+      backdrop-filter: blur(16px);
+    }
+
+    .mobile-flow-inner {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 10px 12px 9px;
+    }
+
+    .mobile-flow-meta {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      color: #17345e;
+    }
+
+    .mobile-flow-meta strong {
+      font-size: 15px;
+    }
+
+    .mobile-flow-count {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .mobile-flow-progress {
+      height: 4px;
+      margin: 7px 0 8px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #dbe4f2;
+    }
+
+    .mobile-flow-progress span {
+      display: block;
+      width: 20%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #244f82, #b99748);
+      transition: width .25s ease;
+    }
+
+    .mobile-flow-tabs {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 4px;
+    }
+
+    .mobile-flow-tab {
+      min-height: 34px;
+      padding: 5px 3px;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      background: transparent;
+      color: #60708e;
+      box-shadow: none;
+      font-size: 10px;
+      font-weight: 750;
+    }
+
+    .mobile-flow-tab:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .mobile-flow-tab[aria-current="step"] {
+      border-color: rgba(173,141,62,.36);
+      background: #fff8e9;
+      color: #17345e;
+    }
+
+    .mobile-flow-actions {
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px calc(9px + env(safe-area-inset-bottom));
+      border-top: 1px solid rgba(68,91,137,.2);
+      background: rgba(247,250,255,.97);
+      box-shadow: 0 -12px 30px rgba(18,39,77,.1);
+      backdrop-filter: blur(16px);
+    }
+
+    .mobile-flow-actions button {
+      min-height: 46px;
+      margin: 0;
+      border-radius: 12px;
+      font-size: 14px;
+    }
+
+    .mobile-flow-actions button:disabled {
+      cursor: not-allowed;
+      opacity: .45;
+    }
+
+    .mobile-flow-actions .mobile-flow-primary {
+      flex: 1 1 auto;
+    }
+
+    .mobile-flow-actions .mobile-flow-secondary {
+      flex: 0 0 92px;
+    }
+
     .layer-kicker {
       display: block;
       margin-bottom: 3px;
@@ -1036,11 +1148,11 @@
     @media (max-width: 719px) {
       header {
         min-height: auto;
-        padding: 26px 16px 44px;
+        padding: 22px 16px 28px;
       }
 
       .header-inner {
-        gap: 52px;
+        gap: 20px;
       }
 
       header .eyebrow {
@@ -1048,7 +1160,7 @@
       }
 
       h1 {
-        font-size: clamp(32px, 10vw, 42px);
+        font-size: clamp(30px, 9vw, 38px);
       }
 
       .subtitle {
@@ -1060,8 +1172,30 @@
       }
 
       .mdt-orbit {
-        transform: scale(.9);
-        margin-block: -8px 4px;
+        transform: scale(.72);
+        margin-block: -28px -24px;
+      }
+
+      body.mobile-flow-ready .mobile-flow-nav {
+        position: sticky;
+        top: 0;
+        z-index: 60;
+        display: block;
+      }
+
+      body.mobile-flow-ready .mobile-flow-actions {
+        position: fixed;
+        inset: auto 0 0;
+        z-index: 70;
+        display: flex;
+      }
+
+      body.mobile-flow-ready main {
+        padding-bottom: 104px;
+      }
+
+      body.mobile-flow-ready main > .card[data-mobile-step]:not(.is-mobile-step-active) {
+        display: none;
       }
 
       main {
@@ -1118,7 +1252,23 @@
 
       .flip-card,
       .flip-inner {
-        min-height: 430px;
+        min-height: 315px;
+      }
+
+      .flip-card.is-flipped,
+      .flip-card.is-flipped .flip-inner {
+        min-height: min(72vh, 640px);
+      }
+
+      .flip-back .flip-button {
+        position: sticky;
+        bottom: 0;
+        z-index: 4;
+        box-shadow: 0 -10px 20px rgba(242,246,252,.96);
+      }
+
+      #frailtyMethod.has-method-selection .frailty-method:not(.is-selected) {
+        display: none;
       }
 
       .footer-note {
@@ -1194,8 +1344,25 @@
     </div>
   </header>
 
+  <nav id="mobileFlowNav" class="mobile-flow-nav" aria-label="手机端术前评估步骤">
+    <div class="mobile-flow-inner">
+      <div class="mobile-flow-meta">
+        <strong id="mobileFlowTitle">基础资料</strong>
+        <span id="mobileFlowCount" class="mobile-flow-count">步骤 1 / 5</span>
+      </div>
+      <div class="mobile-flow-progress" aria-hidden="true"><span id="mobileFlowProgress"></span></div>
+      <div class="mobile-flow-tabs">
+        <button type="button" class="mobile-flow-tab" data-mobile-flow-target="1" aria-current="step">资料</button>
+        <button type="button" class="mobile-flow-tab" data-mobile-flow-target="2">RCRI</button>
+        <button type="button" class="mobile-flow-tab" data-mobile-flow-target="3">画像</button>
+        <button type="button" class="mobile-flow-tab" data-mobile-flow-target="4">MDT</button>
+        <button type="button" class="mobile-flow-tab" data-mobile-flow-target="5">报告</button>
+      </div>
+    </div>
+  </nav>
+
   <main>
-    <section class="card" aria-labelledby="patient-title">
+    <section id="patientSection" class="card" aria-labelledby="patient-title" data-mobile-step="1">
       <h2 id="patient-title">1. 患者基本信息</h2>
       <div class="three">
         <label>年龄
@@ -1230,7 +1397,7 @@
       </div>
     </section>
 
-    <section class="card" aria-labelledby="surgery-title">
+    <section id="surgerySection" class="card" aria-labelledby="surgery-title" data-mobile-step="1">
       <h2 id="surgery-title">2. 手术信息与手术风险</h2>
       <div class="two">
         <label>手术名称
@@ -1258,7 +1425,7 @@
       </div>
     </section>
 
-    <section class="card" aria-labelledby="history-title">
+    <section id="historySection" class="card" aria-labelledby="history-title" data-mobile-step="1">
       <h2 id="history-title">3. 心脏病史</h2>
       <div class="checkbox-grid">
         <label class="check"><input id="cad" type="checkbox">冠心病</label>
@@ -1285,7 +1452,7 @@
       </div>
     </section>
 
-    <section class="card layer-card" aria-labelledby="layer-title">
+    <section id="layerSection" class="card layer-card" aria-labelledby="layer-title" data-mobile-step="3">
       <h2 id="layer-title">4. 分层风险画像</h2>
       <div class="layer-intro">
         <p class="hint">分别记录总体死亡风险、功能容量与老年脆弱性；各层预测目标不同，不相加、不生成未经验证的综合总分。</p>
@@ -1302,7 +1469,7 @@
                 <input id="sortRisk" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="%">
               </label>
               <p class="layer-note">仅手工录入外部已获得结果；本系统不运行 SORT 算法。</p>
-              <button type="button" class="flip-button" aria-expanded="false" aria-controls="sortMethod" onclick="toggleRiskCard('sortCard', this)">翻转查看方法</button>
+              <button type="button" class="flip-button" aria-expanded="false" aria-controls="sortMethod" onclick="toggleRiskCard('sortCard', this)">查看教学算法</button>
             </div>
             <div id="sortMethod" class="flip-face flip-back">
               <span class="layer-kicker">Method / rights status</span>
@@ -1356,7 +1523,7 @@
                 <input id="dasiScore" type="number" min="0" max="58.2" step="0.1" inputmode="decimal" placeholder="0–58.2">
               </label>
               <p class="layer-note">录入已完成量表的总分；不在页面复制完整问卷或自动换算。</p>
-              <button type="button" class="flip-button" aria-expanded="false" aria-controls="dasiMethod" onclick="toggleRiskCard('dasiCard', this)">翻转查看问卷状态</button>
+              <button type="button" class="flip-button" aria-expanded="false" aria-controls="dasiMethod" onclick="toggleRiskCard('dasiCard', this)">查看教学速览</button>
             </div>
             <div id="dasiMethod" class="flip-face flip-back">
               <span class="layer-kicker">Questionnaire / rights status</span>
@@ -1416,7 +1583,7 @@
                 </label>
               </div>
               <p id="frailtyHint" class="layer-note">请选择工具后录入由受训人员获得的既有分数。</p>
-              <button type="button" class="flip-button" aria-expanded="false" aria-controls="frailtyMethod" onclick="toggleRiskCard('frailtyCard', this)">翻转查看量表状态</button>
+              <button type="button" class="flip-button" aria-expanded="false" aria-controls="frailtyMethod" onclick="toggleRiskCard('frailtyCard', this)">查看教学速览</button>
             </div>
             <div id="frailtyMethod" class="flip-face flip-back">
               <span class="layer-kicker">Non-official teaching overview</span>
@@ -1472,7 +1639,7 @@
         </article>
       </div>
 
-      <div id="layerSummary" class="small-note layer-summary">尚未录入 SORT、DASI 或脆弱性分数。</div>
+      <div id="layerSummary" class="small-note layer-summary" role="status" aria-live="polite">尚未录入 SORT、DASI 或脆弱性分数。</div>
 
       <details class="activity-context">
         <summary>展开简化活动询问（教学辅助，不替代 DASI）</summary>
@@ -1487,7 +1654,7 @@
       </details>
     </section>
 
-    <section class="card" aria-labelledby="exam-title">
+    <section id="examSection" class="card" aria-labelledby="exam-title" data-mobile-step="3">
       <h2 id="exam-title">5. 风险修饰因子与检查结果</h2>
       <p class="hint">BNP/NT-proBNP、肌钙蛋白与 ECG 独立展示；数值必须结合本院检测方法、参考范围和临床背景解释。</p>
       <div class="two">
@@ -1541,10 +1708,10 @@
       <div class="checkbox-grid" style="margin-top: 12px;">
         <label class="check"><input id="dyspneaOrChange" type="checkbox">存在呼吸困难或临床状态变化</label>
       </div>
-      <div id="creatinineStatus" class="pill" style="margin-top: 12px;">肌酐 &gt;177 μmol/L：未判断</div>
+      <div id="creatinineStatus" class="pill" style="margin-top: 12px;" role="status" aria-live="polite">肌酐 &gt;177 μmol/L：未判断</div>
     </section>
 
-    <section class="card" aria-labelledby="rcri-title">
+    <section id="rcriSection" class="card" aria-labelledby="rcri-title" data-mobile-step="2">
       <h2 id="rcri-title">6. RCRI 教学评分</h2>
       <p class="hint">勾选 RCRI 评分项目后自动计算总分；上方手术信息、心脏病史和肌酐结果也会同步勾选对应项目。</p>
       <div class="checkbox-grid">
@@ -1555,20 +1722,20 @@
         <label class="check"><input id="rcriInsulinDiabetes" class="rcri-item" type="checkbox">胰岛素治疗糖尿病</label>
         <label class="check"><input id="rcriCreatinine" class="rcri-item" type="checkbox">肌酐 &gt;2.0 mg/dL 或 &gt;177 μmol/L</label>
       </div>
-      <div id="rcriStatus" class="status yellow">RCRI = 0</div>
+      <div id="rcriStatus" class="status yellow" role="status" aria-live="polite">RCRI = 0</div>
       <h3>得分原因</h3>
       <ul id="rcriReasons" class="result-list">
         <li>暂无得分项目</li>
       </ul>
     </section>
 
-    <section class="card" aria-labelledby="recommend-title">
+    <section id="recommendSection" class="card" aria-labelledby="recommend-title" data-mobile-step="3">
       <h2 id="recommend-title">7. 辅助评估建议</h2>
       <div class="small-note">本工具仅供教学和临床辅助参考，不替代医生最终判断。以下内容为辅助建议，不是自动诊断。</div>
       <ul id="recommendations" class="result-list"></ul>
     </section>
 
-    <section class="card mdt-card" aria-labelledby="mdt-title">
+    <section id="mdtSection" class="card mdt-card" aria-labelledby="mdt-title" data-mobile-step="4">
       <div class="mdt-header">
         <div>
           <p class="eyebrow">人工会诊闭环 · 非自动决策</p>
@@ -1595,7 +1762,7 @@
         <label class="check"><input id="mdtPostopResource" type="checkbox">术后监护、ICU、特殊设备或人员资源需提前协调</label>
         <label class="check"><input id="mdtGoalsConflict" type="checkbox">患者目标、风险接受程度或团队意见尚未对齐</label>
       </div>
-      <div id="mdtCandidateSignals" class="small-note">候选线索将在现有评估信息变化后显示；必须由高年资麻醉医师人工确认。</div>
+      <div id="mdtCandidateSignals" class="small-note" role="status" aria-live="polite">候选线索将在现有评估信息变化后显示；必须由高年资麻醉医师人工确认。</div>
 
       <h3>问题、目标与团队</h3>
       <div class="two">
@@ -1658,7 +1825,7 @@
       <div class="small-note">流程依据：AKB-GUIDELINE-015、032–037；AKB-LIT-035–041；AKB-CASE-001–004；KC-2026-009。全部为 <code>in_review/context_only</code>，不得驱动自动临床规则。</div>
     </section>
 
-    <section class="card" aria-labelledby="report-title">
+    <section id="reportSection" class="card" aria-labelledby="report-title" data-mobile-step="5">
       <h2 id="report-title">9. 一键复制综合评估报告</h2>
       <div class="button-row">
         <button type="button" onclick="generateReport()">生成评估报告</button>
@@ -1672,8 +1839,13 @@
     </section>
   </main>
 
+  <div id="mobileFlowActions" class="mobile-flow-actions" aria-label="手机端步骤操作">
+    <button id="mobileFlowPrev" type="button" class="secondary mobile-flow-secondary">上一步</button>
+    <button id="mobileFlowNext" type="button" class="mobile-flow-primary">下一步：RCRI</button>
+  </div>
+
   <footer class="footer-note">
-    v0.7.4 Frailty Teaching Overview · AKB V2.1.1 · MDT Roundtable
+    v0.8.0 Mobile Guided Flow · AKB V2.1.1 · MDT Roundtable
   </footer>
 
   <!-- JavaScript 数据与逻辑区 -->
@@ -1816,6 +1988,15 @@
       { id: "rcriInsulinDiabetes", label: "胰岛素治疗糖尿病", active: () => checked("insulinDiabetes") },
       { id: "rcriCreatinine", label: "肌酐 >2.0 mg/dL 或 >177 μmol/L", active: () => isCreatinineHigh() }
     ];
+    const MOBILE_FLOW_STEPS = [
+      { id: 1, title: "基础资料" },
+      { id: 2, title: "RCRI 主评估" },
+      { id: 3, title: "补充风险画像" },
+      { id: 4, title: "MDT 会诊" },
+      { id: 5, title: "综合报告" }
+    ];
+    const MOBILE_FLOW_MEDIA = window.matchMedia("(max-width: 719px)");
+    let mobileFlowStep = 1;
 
     function $(id) {
       return document.getElementById(id);
@@ -1823,6 +2004,71 @@
 
     function value(id) {
       return $(id).value.trim();
+    }
+
+    function updateMobileFlow(moveFocus = false) {
+      const mobileEnabled = MOBILE_FLOW_MEDIA.matches;
+      document.body.classList.toggle("mobile-flow-ready", mobileEnabled);
+
+      document.querySelectorAll("[data-mobile-step]").forEach(section => {
+        const active = !mobileEnabled || Number(section.dataset.mobileStep) === mobileFlowStep;
+        section.classList.toggle("is-mobile-step-active", active);
+        section.inert = !active;
+        if (mobileEnabled) {
+          section.setAttribute("aria-hidden", String(!active));
+        } else {
+          section.removeAttribute("aria-hidden");
+        }
+      });
+
+      if (!mobileEnabled) return;
+
+      const current = MOBILE_FLOW_STEPS[mobileFlowStep - 1];
+      const next = MOBILE_FLOW_STEPS[mobileFlowStep];
+      $("mobileFlowTitle").textContent = current.title;
+      $("mobileFlowCount").textContent = "步骤 " + mobileFlowStep + " / " + MOBILE_FLOW_STEPS.length;
+      $("mobileFlowProgress").style.width = (mobileFlowStep / MOBILE_FLOW_STEPS.length * 100) + "%";
+      $("mobileFlowPrev").disabled = mobileFlowStep === 1;
+      $("mobileFlowNext").disabled = mobileFlowStep === MOBILE_FLOW_STEPS.length;
+      $("mobileFlowNext").textContent = next ? "下一步：" + next.title : "已到综合报告";
+
+      document.querySelectorAll("[data-mobile-flow-target]").forEach(button => {
+        const active = Number(button.dataset.mobileFlowTarget) === mobileFlowStep;
+        if (active) {
+          button.setAttribute("aria-current", "step");
+        } else {
+          button.removeAttribute("aria-current");
+        }
+      });
+
+      if (moveFocus) {
+        const firstSection = document.querySelector('[data-mobile-step="' + mobileFlowStep + '"]');
+        const heading = firstSection ? firstSection.querySelector("h2") : null;
+        if (heading) {
+          heading.tabIndex = -1;
+          heading.focus({ preventScroll: true });
+        }
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        $("mobileFlowNav").scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
+      }
+    }
+
+    function showMobileFlowStep(step, moveFocus = true) {
+      mobileFlowStep = Math.max(1, Math.min(Number(step) || 1, MOBILE_FLOW_STEPS.length));
+      initializeRiskCards();
+      updateMobileFlow(moveFocus);
+    }
+
+    function initializeMobileFlow() {
+      document.querySelectorAll("[data-mobile-flow-target]").forEach(button => {
+        button.addEventListener("click", () => showMobileFlowStep(button.dataset.mobileFlowTarget));
+      });
+      $("mobileFlowPrev").addEventListener("click", () => showMobileFlowStep(mobileFlowStep - 1));
+      $("mobileFlowNext").addEventListener("click", () => showMobileFlowStep(mobileFlowStep + 1));
+      if (typeof MOBILE_FLOW_MEDIA.addEventListener === "function") {
+        MOBILE_FLOW_MEDIA.addEventListener("change", () => updateMobileFlow(false));
+      }
+      updateMobileFlow(false);
     }
 
     function checked(id) {
@@ -1903,9 +2149,12 @@
 
       if (moveFocus) {
         const targetButton = flipped
-          ? back.querySelector(".flip-button")
+          ? back.querySelector("h3")
           : front.querySelector(".flip-button");
-        if (targetButton) targetButton.focus();
+        if (targetButton) {
+          targetButton.tabIndex = -1;
+          targetButton.focus();
+        }
       }
     }
 
@@ -1929,6 +2178,7 @@
       const scoreInput = $("frailtyScore");
       const hint = $("frailtyHint");
       const methodStatus = $("frailtyMethodStatus");
+      $("frailtyMethod").classList.toggle("has-method-selection", Boolean(tool));
       document.querySelectorAll("[data-frailty-method]").forEach(section => {
         section.classList.toggle("is-selected", Boolean(tool) && section.dataset.frailtyMethod === tool);
       });
@@ -2393,6 +2643,7 @@
       $("report").value = "";
       $("mdtDraft").value = "";
       initializeRiskCards();
+      showMobileFlowStep(1, false);
       updateAll();
     }
 
@@ -2419,6 +2670,7 @@
     document.addEventListener("change", handleFormChange);
     document.addEventListener("DOMContentLoaded", function () {
       initializeRiskCards();
+      initializeMobileFlow();
       updateAll();
     });
   </script>
