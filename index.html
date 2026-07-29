@@ -563,7 +563,8 @@
       color: #8d712e;
     }
 
-    .dasi-table-wrap {
+    .dasi-table-wrap,
+    .sort-table-wrap {
       margin-top: 10px;
       overflow-x: auto;
       border: 1px solid rgba(68,91,137,.22);
@@ -571,7 +572,8 @@
       background: #fff;
     }
 
-    .dasi-table {
+    .dasi-table,
+    .sort-table {
       width: 100%;
       border-collapse: collapse;
       font-size: 11px;
@@ -579,14 +581,17 @@
     }
 
     .dasi-table th,
-    .dasi-table td {
+    .dasi-table td,
+    .sort-table th,
+    .sort-table td {
       padding: 7px 8px;
       border-bottom: 1px solid rgba(68,91,137,.14);
       text-align: left;
       vertical-align: top;
     }
 
-    .dasi-table th {
+    .dasi-table th,
+    .sort-table th {
       position: sticky;
       top: 0;
       z-index: 1;
@@ -610,8 +615,23 @@
       font-weight: 800;
     }
 
-    .dasi-table tr:last-child td {
+    .dasi-table tr:last-child td,
+    .sort-table tr:last-child td {
       border-bottom: 0;
+    }
+
+    .sort-table td:first-child {
+      color: #31486f;
+      font-weight: 800;
+    }
+
+    .sort-table td:last-child,
+    .sort-table th:last-child {
+      width: 54px;
+      text-align: right;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+      font-weight: 850;
     }
 
     .formula-stack {
@@ -629,6 +649,14 @@
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       font-size: 11px;
       font-weight: 750;
+    }
+
+    .formula-line.sort-formula {
+      overflow-x: auto;
+      border-left-color: #7690bd;
+      background: #edf2fa;
+      color: #203d6c;
+      white-space: nowrap;
     }
 
     .layer-kicker {
@@ -1227,17 +1255,38 @@
             </div>
             <div id="sortMethod" class="flip-face flip-back">
               <span class="layer-kicker">Method / rights status</span>
-              <h3>SORT 方法与官方入口</h3>
-              <p class="layer-note">原始模型以术前六类变量估计成人非心脏手术后30天死亡风险：</p>
-              <ul class="method-list">
-                <li>ASA-PS 分级</li>
-                <li>手术紧急程度</li>
-                <li>高风险手术专科</li>
-                <li>手术严重程度</li>
-                <li>肿瘤手术</li>
-                <li>年龄 ≥65 岁</li>
-              </ul>
-              <div class="rights-lock">完整系数与计算逻辑尚未获得本产品复用授权；当前请使用官方计算器后回填结果。</div>
+              <h3>原始SORT教学速览</h3>
+              <p class="layer-note">下表解释2014年原始SORT模型。参照组系数为0；每组只选择一个等级。</p>
+              <div class="sort-table-wrap" role="region" aria-label="原始SORT变量与回归系数" tabindex="0">
+                <table class="sort-table">
+                  <thead>
+                    <tr><th>变量</th><th>类别</th><th>系数</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>ASA-PS</td><td>I–II（参照）</td><td>0</td></tr>
+                    <tr><td>ASA-PS</td><td>III</td><td>1.411</td></tr>
+                    <tr><td>ASA-PS</td><td>IV</td><td>2.388</td></tr>
+                    <tr><td>ASA-PS</td><td>V</td><td>4.081</td></tr>
+                    <tr><td>紧急程度</td><td>择期（参照）</td><td>0</td></tr>
+                    <tr><td>紧急程度</td><td>加速 expedited</td><td>1.236</td></tr>
+                    <tr><td>紧急程度</td><td>紧急 urgent</td><td>1.657</td></tr>
+                    <tr><td>紧急程度</td><td>立即 immediate</td><td>2.452</td></tr>
+                    <tr><td>高风险专科</td><td>胃肠、胸外或血管手术</td><td>0.712</td></tr>
+                    <tr><td>手术严重程度</td><td>extra-major / complex</td><td>0.381</td></tr>
+                    <tr><td>肿瘤手术</td><td>是</td><td>0.667</td></tr>
+                    <tr><td>年龄</td><td>＜65岁（参照）</td><td>0</td></tr>
+                    <tr><td>年龄</td><td>65–79岁</td><td>0.777</td></tr>
+                    <tr><td>年龄</td><td>≥80岁</td><td>1.591</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="formula-stack" aria-label="原始SORT风险分数及死亡概率转换">
+                <div class="formula-line sort-formula">S = ASA系数 + 紧急程度系数 + 高风险专科系数 + 手术严重程度系数 + 肿瘤系数 + 年龄系数</div>
+                <div class="formula-line sort-formula">logit(R) = -7.366 + S</div>
+                <div class="formula-line sort-formula">30天死亡概率 R = e^(-7.366 + S) ÷ [1 + e^(-7.366 + S)]</div>
+                <div class="formula-line sort-formula">30天死亡风险(%) = 100 × R</div>
+              </div>
+              <div class="rights-lock">仅用于解释原始2014 SORT。当前官方计算器已显示SORT v2，版本与手术分类可能不同；本页不自动计算，也不能据此单独作出临床决定。</div>
               <div class="official-links">
                 <a href="https://sortsurgery.com/" target="_blank" rel="noopener noreferrer">打开 SORT 官方计算器</a>
                 <a href="https://www.ncepod.org.uk/sort.html" target="_blank" rel="noopener noreferrer">查看 NCEPOD SORT 资料</a>
@@ -1539,7 +1588,7 @@
   </main>
 
   <footer class="footer-note">
-    v0.7.2 DASI Teaching Overview · AKB V2.1.1 · MDT Roundtable
+    v0.7.3 SORT Teaching Overview · AKB V2.1.1 · MDT Roundtable
   </footer>
 
   <!-- JavaScript 数据与逻辑区 -->
@@ -1548,7 +1597,7 @@
     // OPC-AKB-SNAPSHOT:START
     const OPC_KNOWLEDGE_SNAPSHOT = {
           "version": "AKB V2.1.1 / OPC Self-Growing Knowledge Loop",
-          "snapshotDate": "2026-07-28",
+          "snapshotDate": "2026-07-29",
           "generatedBy": "tools/akb_iteration_engine.py",
           "canonicalStore": "Obsidian AKB Markdown",
           "knowledgeHash": "fa485ce8a45a088668f51eb9",
