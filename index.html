@@ -33,6 +33,10 @@
       box-sizing: border-box;
     }
 
+    [hidden] {
+      display: none !important;
+    }
+
     body {
       margin: 0;
       background: var(--bg);
@@ -822,6 +826,129 @@
       flex: 0 0 92px;
     }
 
+    .education-mode-shell {
+      max-width: 1040px;
+      margin: 14px auto 0;
+      padding: 0 16px;
+    }
+
+    .education-mode-panel {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 14px;
+      border: 1px solid rgba(68,91,137,.22);
+      border-radius: 15px;
+      background: rgba(252,253,255,.92);
+      box-shadow: 0 10px 24px rgba(18,39,77,.06);
+    }
+
+    .education-mode-copy {
+      min-width: 0;
+    }
+
+    .education-mode-copy strong {
+      display: block;
+      color: #17345e;
+      font-size: 14px;
+    }
+
+    .education-mode-copy span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .education-mode-switch {
+      display: inline-grid;
+      grid-template-columns: repeat(2, minmax(84px, 1fr));
+      gap: 4px;
+      flex: 0 0 auto;
+      padding: 4px;
+      border: 1px solid rgba(68,91,137,.2);
+      border-radius: 12px;
+      background: #edf2f9;
+    }
+
+    .education-mode-button {
+      min-height: 38px;
+      padding: 7px 10px;
+      border-radius: 9px;
+      background: transparent;
+      color: #526588;
+      box-shadow: none;
+      font-size: 13px;
+    }
+
+    .education-mode-button:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .education-mode-button[aria-pressed="true"] {
+      background: #fff;
+      color: #17345e;
+      box-shadow: 0 5px 12px rgba(18,39,77,.1);
+    }
+
+    .education-mode-button:disabled {
+      cursor: not-allowed;
+      opacity: .45;
+    }
+
+    .trainee-workspace,
+    .teacher-scorecard {
+      margin-top: 12px;
+      padding: 14px;
+      border: 1px solid rgba(68,91,137,.2);
+      border-radius: 14px;
+      background: #f8faff;
+    }
+
+    .trainee-workspace h3,
+    .teacher-scorecard h3 {
+      margin-top: 0;
+    }
+
+    .training-lock-note {
+      margin-top: 10px;
+      padding: 11px 12px;
+      border: 1px dashed rgba(173,141,62,.55);
+      border-radius: 11px;
+      background: #fff9eb;
+      color: #6f5720;
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .teacher-review-card {
+      border-top: 4px solid #b28a32;
+      background:
+        radial-gradient(circle at 94% 5%, rgba(213,184,108,.16), transparent 14rem),
+        rgba(252,253,255,.96);
+    }
+
+    .teacher-score-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .submission-snapshot {
+      max-height: 320px;
+      overflow: auto;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .teacher-output {
+      min-height: 240px;
+      background: #f5f8fd;
+    }
+
     .layer-kicker {
       display: block;
       margin-bottom: 3px;
@@ -1194,6 +1321,25 @@
         padding-bottom: 104px;
       }
 
+      .education-mode-shell {
+        margin-top: 10px;
+        padding: 0 12px;
+      }
+
+      .education-mode-panel {
+        display: grid;
+        gap: 9px;
+        padding: 11px;
+      }
+
+      .education-mode-switch {
+        width: 100%;
+      }
+
+      .teacher-score-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
       body.mobile-flow-ready main > .card[data-mobile-step]:not(.is-mobile-step-active) {
         display: none;
       }
@@ -1310,6 +1456,10 @@
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
+      .teacher-score-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
       .decision-track {
         grid-template-columns: repeat(6, minmax(0, 1fr));
       }
@@ -1360,6 +1510,19 @@
       </div>
     </div>
   </nav>
+
+  <section class="education-mode-shell" aria-labelledby="educationModeTitle">
+    <div class="education-mode-panel">
+      <div class="education-mode-copy">
+        <strong id="educationModeTitle">规培教学身份</strong>
+        <span id="educationModeStatus" role="status" aria-live="polite">学员先独立判断；提交后解锁教学提示和教师评价。</span>
+      </div>
+      <div class="education-mode-switch" aria-label="选择教学身份">
+        <button id="traineeModeButton" type="button" class="education-mode-button" aria-pressed="true">学员模式</button>
+        <button id="teacherModeButton" type="button" class="education-mode-button" aria-pressed="false" disabled>教师模式</button>
+      </div>
+    </div>
+  </section>
 
   <main>
     <section id="patientSection" class="card" aria-labelledby="patient-title" data-mobile-step="1">
@@ -1730,8 +1893,26 @@
     </section>
 
     <section id="recommendSection" class="card" aria-labelledby="recommend-title" data-mobile-step="3">
-      <h2 id="recommend-title">7. 辅助评估建议</h2>
-      <div class="small-note">本工具仅供教学和临床辅助参考，不替代医生最终判断。以下内容为辅助建议，不是自动诊断。</div>
+      <h2 id="recommend-title">7. 学员独立判断与教学提示</h2>
+      <div class="small-note">先完成自己的风险判断和计划，再提交解锁系统教学提示。系统提示不是标准答案，也不替代上级医师审核。</div>
+      <div class="trainee-workspace">
+        <h3>学员初评</h3>
+        <div class="two">
+          <label>我的风险判断与依据
+            <textarea id="traineeJudgment" placeholder="用自己的话说明主要风险、依据、需要排除的问题和不确定性。"></textarea>
+          </label>
+          <label>我的评估与围术期计划
+            <textarea id="traineePlan" placeholder="说明拟补充的信息、检查或优化方向，以及是否需要MDT；不要直接复制系统提示。"></textarea>
+          </label>
+        </div>
+        <div class="button-row">
+          <button id="submitTraineeButton" type="button">提交学员初评并解锁提示</button>
+          <button id="reviseTraineeButton" type="button" class="secondary" hidden>退回继续修改</button>
+        </div>
+        <div id="traineeSubmissionStatus" class="small-note" role="status" aria-live="polite">尚未提交；教师模式和教学提示保持锁定。</div>
+      </div>
+      <h3>系统教学提示</h3>
+      <div id="recommendationLock" class="training-lock-note">完成并提交学员初评后显示。请先形成自己的临床推理。</div>
       <ul id="recommendations" class="result-list"></ul>
     </section>
 
@@ -1837,6 +2018,89 @@
       </label>
       <div class="small-note">本工具仅用于教学和临床辅助评估，不替代医生最终判断。</div>
     </section>
+
+    <section id="teacherReviewSection" class="card teacher-review-card" aria-labelledby="teacher-review-title" data-mobile-step="5" hidden>
+      <p class="eyebrow">Formative review · 不自动判定合格</p>
+      <h2 id="teacher-review-title">10. 教师形成性评价</h2>
+      <p class="hint">教师评价基于学员提交时的快照。评分用于反馈学习进展，不作为出科、结业或独立执业资格判定。</p>
+
+      <h3>学员提交快照</h3>
+      <div id="traineeSubmissionSnapshot" class="small-note submission-snapshot">尚无提交快照。</div>
+
+      <div class="teacher-scorecard">
+        <h3>四维观察评分</h3>
+        <div class="teacher-score-grid">
+          <label>信息完整性
+            <select id="teacherInfoScore">
+              <option value="">未评分</option>
+              <option value="1">1 需直接指导</option>
+              <option value="2">2 遗漏较多</option>
+              <option value="3">3 基本完成</option>
+              <option value="4">4 较完整</option>
+              <option value="5">5 独立且系统</option>
+            </select>
+          </label>
+          <label>风险推理
+            <select id="teacherReasoningScore">
+              <option value="">未评分</option>
+              <option value="1">1 需直接指导</option>
+              <option value="2">2 推理薄弱</option>
+              <option value="3">3 基本合理</option>
+              <option value="4">4 能权衡证据</option>
+              <option value="5">5 独立且深入</option>
+            </select>
+          </label>
+          <label>计划合理性
+            <select id="teacherPlanScore">
+              <option value="">未评分</option>
+              <option value="1">1 需直接指导</option>
+              <option value="2">2 计划不完整</option>
+              <option value="3">3 基本可行</option>
+              <option value="4">4 个体化较好</option>
+              <option value="5">5 权衡充分</option>
+            </select>
+          </label>
+          <label>沟通与MDT
+            <select id="teacherCommunicationScore">
+              <option value="">未评分</option>
+              <option value="1">1 需直接指导</option>
+              <option value="2">2 目标不清</option>
+              <option value="3">3 能完成沟通</option>
+              <option value="4">4 能组织协作</option>
+              <option value="5">5 能推动闭环</option>
+            </select>
+          </label>
+        </div>
+        <div class="two" style="margin-top: 12px;">
+          <label>建议监督级别
+            <select id="teacherSupervision">
+              <option value="">未选择</option>
+              <option value="需直接监督">需直接监督</option>
+              <option value="可在间接监督下完成">可在间接监督下完成</option>
+              <option value="完成后由上级复核">可独立完成，完成后由上级复核</option>
+            </select>
+          </label>
+          <label>本次做得好的地方
+            <textarea id="teacherStrengths" placeholder="记录可继续保持的具体行为。"></textarea>
+          </label>
+          <label>关键遗漏或需要修正
+            <textarea id="teacherGaps" placeholder="指出最重要的1–3个遗漏或推理问题。"></textarea>
+          </label>
+          <label>下一次学习目标
+            <textarea id="teacherNextGoal" placeholder="写成具体、可观察、可复核的学习目标。"></textarea>
+          </label>
+        </div>
+        <div class="button-row">
+          <button id="generateTeacherFeedbackButton" type="button">生成教师反馈</button>
+          <button id="copyTeacherFeedbackButton" type="button" class="secondary">复制教师反馈</button>
+          <button id="returnToTraineeButton" type="button" class="secondary">退回学员修改</button>
+        </div>
+      </div>
+      <label style="margin-top: 14px;">教师形成性反馈
+        <textarea id="teacherFeedback" class="teacher-output" readonly placeholder="完成评分和文字反馈后点击“生成教师反馈”。"></textarea>
+      </label>
+      <div class="small-note">隐私：学员快照和教师反馈只保存在当前页面内存，刷新或关闭页面即清除。</div>
+    </section>
   </main>
 
   <div id="mobileFlowActions" class="mobile-flow-actions" aria-label="手机端步骤操作">
@@ -1845,7 +2109,7 @@
   </div>
 
   <footer class="footer-note">
-    v0.8.0 Mobile Guided Flow · AKB V2.1.1 · MDT Roundtable
+    v0.9.0 Training Review Mode · AKB V2.1.1 · MDT Roundtable
   </footer>
 
   <!-- JavaScript 数据与逻辑区 -->
@@ -1997,6 +2261,10 @@
     ];
     const MOBILE_FLOW_MEDIA = window.matchMedia("(max-width: 719px)");
     let mobileFlowStep = 1;
+    let educationMode = "trainee";
+    let traineeSubmitted = false;
+    let traineeSubmissionSnapshot = "";
+    let teacherFeedbackText = "";
 
     function $(id) {
       return document.getElementById(id);
@@ -2069,6 +2337,191 @@
         MOBILE_FLOW_MEDIA.addEventListener("change", () => updateMobileFlow(false));
       }
       updateMobileFlow(false);
+    }
+
+    function updateEducationModeUI() {
+      const teacherMode = educationMode === "teacher";
+      $("traineeModeButton").setAttribute("aria-pressed", String(!teacherMode));
+      $("teacherModeButton").setAttribute("aria-pressed", String(teacherMode));
+      $("teacherModeButton").disabled = !traineeSubmitted;
+      $("teacherReviewSection").hidden = !teacherMode;
+      document.body.classList.toggle("education-teacher", teacherMode);
+
+      $("educationModeStatus").textContent = teacherMode
+        ? "教师模式：基于学员提交快照进行形成性评价，不自动判定合格。"
+        : traineeSubmitted
+          ? "学员初评已提交；教学提示已解锁，可切换教师模式。"
+          : "学员先独立判断；提交后解锁教学提示和教师评价。";
+
+      $("recommendationLock").hidden = traineeSubmitted || teacherMode;
+      $("recommendations").hidden = !traineeSubmitted && !teacherMode;
+      updateMobileFlow(false);
+      generateRecommendations();
+    }
+
+    function setEducationMode(mode) {
+      if (mode === "teacher" && !traineeSubmitted) {
+        $("educationModeStatus").textContent = "请先由学员提交初评，再进入教师模式。";
+        return;
+      }
+      educationMode = mode === "teacher" ? "teacher" : "trainee";
+      updateEducationModeUI();
+      if (educationMode === "teacher" && MOBILE_FLOW_MEDIA.matches) {
+        showMobileFlowStep(5);
+      }
+    }
+
+    function buildTraineeSubmissionSnapshot() {
+      const rcri = calculateRCRI();
+      const layers = layeredAssessment();
+      return [
+        "学员术前评估提交快照",
+        "提交时间：" + new Date().toLocaleString("zh-CN", { hour12: false }),
+        "产品版本：v0.9.0 / AKB V2.1.1 / " + OPC_KNOWLEDGE_SNAPSHOT.knowledgeHash,
+        "",
+        "病例范围",
+        "年龄/性别：" + (value("age") || "未填写") + " / " + (value("sex") || "未填写"),
+        "拟行手术：" + (value("surgeryName") || "未填写"),
+        "手术时机/风险：" + (value("surgeryTiming") || "未填写") + " / " + (value("surgeryRisk") || "未填写"),
+        "",
+        "结构化结果（仅供形成性反馈）",
+        "RCRI：" + rcri.score + " 分；" + (rcri.reasons.length ? rcri.reasons.join("、") : "无得分项目"),
+        "SORT：" + (layers.sortRisk === null ? "未录入" : layers.sortRisk + "%"),
+        "DASI：" + (layers.dasiScore === null ? "未录入" : layers.dasiScore + " 分"),
+        "脆弱性：" + (!layers.frailtyTool ? "未选择" : layers.frailtyTool + " " + (layers.frailtyScore === null ? "未录入" : layers.frailtyScore + " 分")),
+        "",
+        "学员风险判断与依据",
+        value("traineeJudgment"),
+        "",
+        "学员评估与围术期计划",
+        value("traineePlan"),
+        "",
+        "MDT问题/患者目标",
+        (value("mdtQuestion") || "未填写") + " / " + (value("mdtPatientGoals") || "未填写"),
+        "",
+        "边界：本快照用于教学反馈，不是临床结论、手术许可或正式病历。"
+      ].join("\n");
+    }
+
+    function submitTraineeAssessment() {
+      const judgment = value("traineeJudgment");
+      const plan = value("traineePlan");
+      const status = $("traineeSubmissionStatus");
+
+      $("traineeJudgment").removeAttribute("aria-invalid");
+      $("traineePlan").removeAttribute("aria-invalid");
+
+      if (!judgment || !plan) {
+        status.textContent = "请先填写“风险判断与依据”和“评估与围术期计划”。";
+        status.style.borderColor = "var(--red)";
+        const missing = !judgment ? $("traineeJudgment") : $("traineePlan");
+        missing.setAttribute("aria-invalid", "true");
+        missing.focus();
+        return;
+      }
+
+      traineeSubmissionSnapshot = buildTraineeSubmissionSnapshot();
+      traineeSubmitted = true;
+      $("traineeJudgment").readOnly = true;
+      $("traineePlan").readOnly = true;
+      $("submitTraineeButton").disabled = true;
+      $("reviseTraineeButton").hidden = false;
+      $("traineeSubmissionSnapshot").textContent = traineeSubmissionSnapshot;
+      status.textContent = "学员初评已锁定为提交快照；教学提示和教师模式已解锁。";
+      status.style.borderColor = "";
+      updateEducationModeUI();
+    }
+
+    function reopenTraineeAssessment() {
+      traineeSubmitted = false;
+      traineeSubmissionSnapshot = "";
+      teacherFeedbackText = "";
+      educationMode = "trainee";
+      $("traineeJudgment").readOnly = false;
+      $("traineePlan").readOnly = false;
+      $("submitTraineeButton").disabled = false;
+      $("reviseTraineeButton").hidden = true;
+      $("traineeSubmissionSnapshot").textContent = "尚无提交快照。";
+      $("teacherFeedback").value = "";
+      $("traineeSubmissionStatus").textContent = "已退回修改；重新提交前，教师模式和教学提示保持锁定。";
+      updateEducationModeUI();
+      if (MOBILE_FLOW_MEDIA.matches) showMobileFlowStep(3);
+      $("traineeJudgment").focus();
+    }
+
+    function teacherScoreText(id) {
+      const control = $(id);
+      return control.value ? control.options[control.selectedIndex].text : "未评分";
+    }
+
+    function generateTeacherFeedback() {
+      if (!traineeSubmitted) {
+        $("educationModeStatus").textContent = "当前没有可评价的学员提交快照。";
+        return "";
+      }
+
+      const numericScores = [
+        numberValue("teacherInfoScore"),
+        numberValue("teacherReasoningScore"),
+        numberValue("teacherPlanScore"),
+        numberValue("teacherCommunicationScore")
+      ].filter(score => score !== null);
+      const average = numericScores.length
+        ? (numericScores.reduce((sum, score) => sum + score, 0) / numericScores.length).toFixed(1)
+        : "未计算";
+
+      teacherFeedbackText = [
+        "规培教师形成性反馈",
+        "评价时间：" + new Date().toLocaleString("zh-CN", { hour12: false }),
+        "评价依据：学员提交快照；本评价不自动判定合格。",
+        "",
+        "四维观察",
+        "信息完整性：" + teacherScoreText("teacherInfoScore"),
+        "风险推理：" + teacherScoreText("teacherReasoningScore"),
+        "计划合理性：" + teacherScoreText("teacherPlanScore"),
+        "沟通与MDT：" + teacherScoreText("teacherCommunicationScore"),
+        "已评分维度平均值：" + average + (numericScores.length ? "/5（仅作形成性趋势参考）" : ""),
+        "建议监督级别：" + (value("teacherSupervision") || "未选择"),
+        "",
+        "做得好的地方",
+        value("teacherStrengths") || "未填写",
+        "",
+        "关键遗漏或需要修正",
+        value("teacherGaps") || "未填写",
+        "",
+        "下一次学习目标",
+        value("teacherNextGoal") || "未填写",
+        "",
+        "教师声明：以上为形成性反馈，不替代本院正式考核、上级医师临床审核或患者诊疗决策。"
+      ].join("\n");
+
+      $("teacherFeedback").value = teacherFeedbackText;
+      return teacherFeedbackText;
+    }
+
+    async function copyTeacherFeedback() {
+      const feedback = $("teacherFeedback").value || generateTeacherFeedback();
+      if (!feedback) return;
+      try {
+        await navigator.clipboard.writeText(feedback);
+        alert("教师反馈已复制。");
+      } catch (error) {
+        $("teacherFeedback").focus();
+        $("teacherFeedback").select();
+        document.execCommand("copy");
+        alert("教师反馈已复制。");
+      }
+    }
+
+    function initializeEducationModes() {
+      $("traineeModeButton").addEventListener("click", () => setEducationMode("trainee"));
+      $("teacherModeButton").addEventListener("click", () => setEducationMode("teacher"));
+      $("submitTraineeButton").addEventListener("click", submitTraineeAssessment);
+      $("reviseTraineeButton").addEventListener("click", reopenTraineeAssessment);
+      $("generateTeacherFeedbackButton").addEventListener("click", generateTeacherFeedback);
+      $("copyTeacherFeedbackButton").addEventListener("click", copyTeacherFeedback);
+      $("returnToTraineeButton").addEventListener("click", reopenTraineeAssessment);
+      updateEducationModeUI();
     }
 
     function checked(id) {
@@ -2415,11 +2868,16 @@
 
       const list = $("recommendations");
       list.innerHTML = "";
-      recommendations.forEach(text => {
-        const item = document.createElement("li");
-        item.textContent = text;
-        list.appendChild(item);
-      });
+      const teachingUnlocked = traineeSubmitted || educationMode === "teacher";
+      list.hidden = !teachingUnlocked;
+      $("recommendationLock").hidden = teachingUnlocked;
+      if (teachingUnlocked) {
+        recommendations.forEach(text => {
+          const item = document.createElement("li");
+          item.textContent = text;
+          list.appendChild(item);
+        });
+      }
 
       return recommendations;
     }
@@ -2540,6 +2998,9 @@
       const rcri = calculateRCRI();
       const mets = assessMETs();
       const recommendations = generateRecommendations();
+      const reportRecommendations = traineeSubmitted || educationMode === "teacher"
+        ? recommendations
+        : ["教学提示尚未解锁：请先完成并提交学员独立判断。"];
       const history = selectedHeartHistory();
       const creatinine = value("creatinine");
       const mdtDraft = generateMdtDraft();
@@ -2594,7 +3055,7 @@
         "呼吸困难或临床状态变化：" + yesNoText(checked("dyspneaOrChange")),
         "",
         "九、辅助评估建议",
-        recommendations.map((text, index) => (index + 1) + ". " + text).join("\n"),
+        reportRecommendations.map((text, index) => (index + 1) + ". " + text).join("\n"),
         "",
         "十、围术期 MDT 麻醉会诊草稿",
         mdtDraft,
@@ -2622,6 +3083,10 @@
     }
 
     function resetForm() {
+      educationMode = "trainee";
+      traineeSubmitted = false;
+      traineeSubmissionSnapshot = "";
+      teacherFeedbackText = "";
       document.querySelectorAll("input").forEach(input => {
         if (input.type === "checkbox") {
           input.checked = false;
@@ -2642,8 +3107,21 @@
       $("bmi").value = "";
       $("report").value = "";
       $("mdtDraft").value = "";
+      $("traineeJudgment").value = "";
+      $("traineeJudgment").readOnly = false;
+      $("traineeJudgment").removeAttribute("aria-invalid");
+      $("traineePlan").value = "";
+      $("traineePlan").readOnly = false;
+      $("traineePlan").removeAttribute("aria-invalid");
+      $("submitTraineeButton").disabled = false;
+      $("reviseTraineeButton").hidden = true;
+      $("traineeSubmissionStatus").textContent = "尚未提交；教师模式和教学提示保持锁定。";
+      $("traineeSubmissionStatus").style.borderColor = "";
+      $("traineeSubmissionSnapshot").textContent = "尚无提交快照。";
+      $("teacherFeedback").value = "";
       initializeRiskCards();
       showMobileFlowStep(1, false);
+      updateEducationModeUI();
       updateAll();
     }
 
@@ -2671,6 +3149,7 @@
     document.addEventListener("DOMContentLoaded", function () {
       initializeRiskCards();
       initializeMobileFlow();
+      initializeEducationModes();
       updateAll();
     });
   </script>
