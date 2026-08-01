@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>心脏病患者接受非心脏手术术前麻醉评估助手</title>
+  <title>非心脏手术术前分步评估与 MDT 工作台</title>
 
   <!-- CSS 样式区 -->
   <style>
@@ -193,6 +193,109 @@
       border: 1px solid var(--line);
       color: var(--muted);
       font-size: 14px;
+    }
+
+    .clinical-track-shell {
+      max-width: 1040px;
+      margin: 14px auto 0;
+      padding: 0 16px;
+    }
+
+    .clinical-track {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      overflow: hidden;
+      border: 1px solid rgba(68, 91, 137, 0.28);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: 0 14px 34px rgba(18, 39, 77, 0.08);
+    }
+
+    .clinical-track-item {
+      position: relative;
+      min-width: 0;
+      padding: 13px 12px 14px;
+      border-right: 1px solid var(--line);
+    }
+
+    .clinical-track-item:last-child {
+      border-right: 0;
+    }
+
+    .clinical-track-item strong,
+    .clinical-track-item span {
+      display: block;
+    }
+
+    .clinical-track-item strong {
+      color: var(--blue);
+      font-size: 14px;
+    }
+
+    .clinical-track-item span {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .clinical-track-item::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 4px;
+      background: var(--mist);
+      opacity: .45;
+    }
+
+    .clinical-track-item:nth-child(2)::before {
+      background: var(--red);
+    }
+
+    .clinical-track-item:nth-child(5)::before {
+      background: var(--gold);
+    }
+
+    .gate-band {
+      display: grid;
+      gap: 10px;
+      margin: 12px 0;
+      padding: 14px;
+      border: 1px solid rgba(180, 35, 24, .2);
+      border-radius: 15px;
+      background: linear-gradient(135deg, #fff 0%, #fef6f5 100%);
+    }
+
+    .gate-band strong {
+      color: var(--red);
+    }
+
+    .decision-question {
+      margin: 0 0 12px;
+      padding: 12px 14px;
+      border-left: 4px solid var(--gold);
+      border-radius: 0 12px 12px 0;
+      background: var(--gold-soft);
+      color: #614c1f;
+      font-weight: 800;
+    }
+
+    .compact-details {
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .7);
+    }
+
+    .compact-details > summary {
+      cursor: pointer;
+      padding: 13px 14px;
+      color: var(--blue);
+      font-weight: 800;
+    }
+
+    .compact-details-body {
+      padding: 0 14px 14px;
     }
 
     .button-row {
@@ -769,7 +872,7 @@
 
     .mobile-flow-tabs {
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(6, minmax(0, 1fr));
       gap: 4px;
     }
 
@@ -1421,6 +1524,21 @@
         grid-template-columns: 1fr;
       }
 
+      .clinical-track-shell {
+        margin-top: 10px;
+        padding: 0 12px;
+      }
+
+      .clinical-track {
+        grid-template-columns: repeat(6, minmax(116px, 1fr));
+        overflow-x: auto;
+        scroll-snap-type: x proximity;
+      }
+
+      .clinical-track-item {
+        scroll-snap-align: start;
+      }
+
       body.mobile-flow-ready main > .card[data-mobile-step]:not(.is-mobile-step-active) {
         display: none;
       }
@@ -1558,8 +1676,8 @@
     <div class="header-inner">
       <div class="hero-copy">
         <p class="eyebrow">Preoperative MDT workspace</p>
-        <h1>术前风险，看见全局再决定</h1>
-        <p class="subtitle">老年心脏病患者非心脏手术风险评估与多学科讨论工作台</p>
+        <h1>先过门，再评分；先问意义，再开检查</h1>
+        <p class="subtitle">老年心脏病患者非心脏手术分步风险评估、共享决策与多学科讨论工作台</p>
         <div class="disclaimer">用于教学和临床辅助评估；整合风险、患者目标与团队意见，不替代医生最终判断。公开测试请勿输入真实可识别患者信息。</div>
         <a class="hero-cta" href="#patient-title">开始术前评估</a>
       </div>
@@ -1578,16 +1696,17 @@
   <nav id="mobileFlowNav" class="mobile-flow-nav" aria-label="手机端术前评估步骤">
     <div class="mobile-flow-inner">
       <div class="mobile-flow-meta">
-        <strong id="mobileFlowTitle">基础资料</strong>
-        <span id="mobileFlowCount" class="mobile-flow-count">步骤 1 / 5</span>
+        <strong id="mobileFlowTitle">手术时效</strong>
+        <span id="mobileFlowCount" class="mobile-flow-count">步骤 1 / 6</span>
       </div>
       <div class="mobile-flow-progress" aria-hidden="true"><span id="mobileFlowProgress"></span></div>
       <div class="mobile-flow-tabs">
-        <button type="button" class="mobile-flow-tab" data-mobile-flow-target="1" aria-current="step">资料</button>
-        <button type="button" class="mobile-flow-tab" data-mobile-flow-target="2">RCRI</button>
-        <button type="button" class="mobile-flow-tab" data-mobile-flow-target="3">画像</button>
-        <button type="button" class="mobile-flow-tab" data-mobile-flow-target="4">MDT</button>
-        <button type="button" class="mobile-flow-tab" data-mobile-flow-target="5">报告</button>
+        <button type="button" class="mobile-flow-tab" data-mobile-flow-target="1" aria-current="step">时效</button>
+        <button type="button" class="mobile-flow-tab" data-mobile-flow-target="2">门禁</button>
+        <button type="button" class="mobile-flow-tab" data-mobile-flow-target="3">风险</button>
+        <button type="button" class="mobile-flow-tab" data-mobile-flow-target="4">储备</button>
+        <button type="button" class="mobile-flow-tab" data-mobile-flow-target="5">决策</button>
+        <button type="button" class="mobile-flow-tab" data-mobile-flow-target="6">报告</button>
       </div>
     </div>
   </nav>
@@ -1605,9 +1724,20 @@
     </div>
   </section>
 
+  <section class="clinical-track-shell" aria-label="术前分步临床决策路径">
+    <div class="clinical-track">
+      <div class="clinical-track-item"><strong>1 时效</strong><span>为什么现在做？延误伤害是什么？</span></div>
+      <div class="clinical-track-item"><strong>2 门禁</strong><span>有无急性不稳定心脏状态？</span></div>
+      <div class="clinical-track-item"><strong>3 风险</strong><span>手术与患者基线风险多高？</span></div>
+      <div class="clinical-track-item"><strong>4 储备</strong><span>功能、脆弱性和心肺储备如何？</span></div>
+      <div class="clinical-track-item"><strong>5 决策</strong><span>什么检查会改变管理？有哪些路径？</span></div>
+      <div class="clinical-track-item"><strong>6 闭环</strong><span>谁负责、何时复评、术后去哪？</span></div>
+    </div>
+  </section>
+
   <main>
     <section id="patientSection" class="card" aria-labelledby="patient-title" data-mobile-step="1">
-      <h2 id="patient-title">1. 患者基本信息</h2>
+      <h2 id="patient-title">1B. 患者背景与当前生理状态</h2>
       <div class="three">
         <label>年龄
           <input id="age" type="number" min="0" max="120" inputmode="numeric" placeholder="岁">
@@ -1638,11 +1768,30 @@
         <label>BMI 自动计算
           <input id="bmi" readonly placeholder="自动计算">
         </label>
+        <label>静息血压
+          <input id="restingBp" type="text" inputmode="text" placeholder="例如 138/76 mmHg">
+        </label>
+        <label>静息心率
+          <input id="restingHr" type="number" min="0" max="250" inputmode="numeric" placeholder="次/分">
+        </label>
       </div>
+      <details class="compact-details">
+        <summary>按需记录关键症状与近期变化</summary>
+        <div class="compact-details-body checkbox-grid">
+          <label class="check"><input id="symptomChestPain" type="checkbox">胸痛或胸部不适</label>
+          <label class="check"><input id="symptomDyspnea" type="checkbox">新发或加重呼吸困难</label>
+          <label class="check"><input id="symptomSyncope" type="checkbox">晕厥或近乎晕厥</label>
+          <label class="check"><input id="symptomPalpitation" type="checkbox">心悸或疑似心律失常症状</label>
+          <label class="check"><input id="symptomOrthopnea" type="checkbox">端坐呼吸/夜间阵发性呼吸困难</label>
+          <label class="check"><input id="symptomEdema" type="checkbox">新发或加重外周水肿</label>
+        </div>
+      </details>
     </section>
 
     <section id="surgerySection" class="card" aria-labelledby="surgery-title" data-mobile-step="1">
-      <h2 id="surgery-title">2. 手术信息与手术风险</h2>
+      <p class="eyebrow">Gate 1 · Time and value</p>
+      <h2 id="surgery-title">1A. 手术必要性、时效与预期获益</h2>
+      <p class="decision-question">先回答：为什么需要在这个时间点手术？若延误，患者会失去什么？</p>
       <div class="two">
         <label>手术名称
           <input id="surgeryName" type="text" placeholder="例如：腹腔镜胆囊切除术">
@@ -1650,8 +1799,10 @@
         <label>手术时机
           <select id="surgeryTiming">
             <option value="">未填写</option>
-            <option value="急诊">急诊</option>
-            <option value="择期">择期</option>
+            <option value="立即">立即：需尽快挽救生命/器官</option>
+            <option value="紧急">紧急：通常需在较短时间内完成</option>
+            <option value="时间敏感">时间敏感：延误可能影响结局</option>
+            <option value="择期">择期：可安排并完成优化</option>
           </select>
         </label>
         <label>手术风险
@@ -1666,11 +1817,60 @@
           <input id="highRiskSurgery" type="checkbox">
           是否为 RCRI 高危手术
         </label>
+        <label>手术主要目标/预期获益
+          <textarea id="surgeryBenefit" placeholder="如生存获益、症状缓解、功能恢复或诊断价值。"></textarea>
+        </label>
+        <label>延误或取消的潜在伤害
+          <textarea id="delayHarm" placeholder="记录疾病进展、功能丧失、急诊转化或其他时间代价。"></textarea>
+        </label>
+        <label>患者最重视的结局
+          <textarea id="earlyPatientGoal" placeholder="记录患者希望保留的功能和不能接受的结局；后续可在 MDT 细化。"></textarea>
+        </label>
       </div>
     </section>
 
-    <section id="historySection" class="card" aria-labelledby="history-title" data-mobile-step="1">
-      <h2 id="history-title">3. 心脏病史</h2>
+    <section id="safetyGateSection" class="card" aria-labelledby="safety-gate-title" data-mobile-step="2">
+      <p class="eyebrow">Gate 2 · Acute cardiac safety</p>
+      <h2 id="safety-gate-title">2. 急性不稳定心脏状态门禁</h2>
+      <p class="decision-question">未评估不等于未发现。任何“存在”或“不确定”都需要结合手术时效，由高年资医师决定下一步。</p>
+      <div class="gate-band">
+        <strong>本门仅筛查三类急性状态</strong>
+        <span>急性冠脉综合征、失代偿性心衰、不稳定或严重心律失常。严重瓣膜病和肺动脉高压在后续作为高影响风险修饰因子处理。</span>
+      </div>
+      <div class="three">
+        <label>急性冠脉综合征
+          <select id="acsGateStatus">
+            <option value="unassessed">未评估</option>
+            <option value="absent">未发现</option>
+            <option value="present">存在</option>
+            <option value="uncertain">不确定</option>
+          </select>
+        </label>
+        <label>失代偿性心衰
+          <select id="hfGateStatus">
+            <option value="unassessed">未评估</option>
+            <option value="absent">未发现</option>
+            <option value="present">存在</option>
+            <option value="uncertain">不确定</option>
+          </select>
+        </label>
+        <label>不稳定/严重心律失常
+          <select id="arrhythmiaGateStatus">
+            <option value="unassessed">未评估</option>
+            <option value="absent">未发现</option>
+            <option value="present">存在</option>
+            <option value="uncertain">不确定</option>
+          </select>
+        </label>
+      </div>
+      <label style="margin-top: 12px;">门禁依据与待澄清信息
+        <textarea id="safetyGateBasis" placeholder="结合症状、体征、ECG、肌钙蛋白、既往记录及会诊意见说明；不要只写‘无’。"></textarea>
+      </label>
+      <div id="safetyGateSummary" class="status yellow" role="status" aria-live="polite">门禁尚未完成：存在未评估项目。</div>
+    </section>
+
+    <section id="historySection" class="card" aria-labelledby="history-title" data-mobile-step="2">
+      <h2 id="history-title">2A. 心血管病史与高影响修饰因子</h2>
       <div class="checkbox-grid">
         <label class="check"><input id="cad" type="checkbox">冠心病</label>
         <label class="check"><input id="mi" type="checkbox">既往心肌梗死</label>
@@ -1687,17 +1887,52 @@
         <label class="check"><input id="ckd" type="checkbox">慢性肾功能不全</label>
       </div>
 
-      <h3>活动性心脏病风险提示</h3>
+      <h3>风险修饰因子（不等同于急性门禁）</h3>
       <div class="checkbox-grid">
-        <label class="check"><input id="unstableAngina" type="checkbox">新近或不稳定心绞痛（预留）</label>
-        <label class="check"><input id="decompensatedHF" type="checkbox">失代偿心衰</label>
-        <label class="check"><input id="seriousArrhythmia" type="checkbox">严重心律失常</label>
-        <label class="check"><input id="severeValveDisease" type="checkbox">严重瓣膜病</label>
+        <label class="check"><input id="severeValveDisease" type="checkbox">已知或疑似严重瓣膜病</label>
+        <label class="check"><input id="severePulmonaryHypertension" type="checkbox">已知或疑似严重肺动脉高压/右心负荷</label>
+        <label class="check"><input id="recentStroke" type="checkbox">近期卒中/TIA或神经功能仍不稳定</label>
+        <label class="check"><input id="recentHeartFailureAdmission" type="checkbox">近期心衰住院或容量状态反复</label>
       </div>
+
+      <details class="compact-details">
+        <summary>PCI / CABG / 抗栓背景（有相关病史时展开）</summary>
+        <div class="compact-details-body two">
+          <label>最近 PCI / CABG 日期
+            <input id="revascularizationDate" type="date">
+          </label>
+          <label>PCI 当时临床背景
+            <select id="pciIndication">
+              <option value="">未记录/不适用</option>
+              <option value="ACS">急性冠脉综合征</option>
+              <option value="慢性冠脉病">慢性冠脉病</option>
+              <option value="不确定">不确定</option>
+            </select>
+          </label>
+          <label>支架/桥血管信息
+            <input id="revascularizationDetail" type="text" placeholder="类型、部位、复杂性及资料来源">
+          </label>
+          <label>当前抗血小板/抗凝方案
+            <input id="antithromboticRegimen" type="text" placeholder="仅记录现状，不在页面生成停药方案">
+          </label>
+          <label>出血风险与血栓风险待解决问题
+            <textarea id="antithromboticQuestion" placeholder="写成需由外科、心内、麻醉共同回答的问题。"></textarea>
+          </label>
+          <label>心内科/本院流程确认状态
+            <select id="cardiologyPlanStatus">
+              <option value="未评估">未评估</option>
+              <option value="待确认">待确认</option>
+              <option value="已有书面方案">已有书面方案</option>
+              <option value="不适用">不适用</option>
+            </select>
+          </label>
+        </div>
+      </details>
     </section>
 
     <section id="layerSection" class="card layer-card" aria-labelledby="layer-title" data-mobile-step="3">
-      <h2 id="layer-title">4. 分层风险画像</h2>
+      <p class="eyebrow">Gate 3–4 · Baseline risk and reserve</p>
+      <h2 id="layer-title">4. 基线风险、功能容量与脆弱性</h2>
       <div class="layer-intro">
         <p class="hint">分别记录总体死亡风险、功能容量与老年脆弱性；各层预测目标不同，不相加、不生成未经验证的综合总分。</p>
         <span class="candidate-badge">candidate / in_review</span>
@@ -1898,8 +2133,18 @@
       </details>
     </section>
 
-    <section id="examSection" class="card" aria-labelledby="exam-title" data-mobile-step="3">
-      <h2 id="exam-title">5. 风险修饰因子与检查结果</h2>
+    <section id="examSection" class="card" aria-labelledby="exam-title" data-mobile-step="4">
+      <p class="eyebrow">Gate 4–5 · Modifiers and test stewardship</p>
+      <h2 id="exam-title">5. 风险修饰因子与目标导向检查</h2>
+      <p class="decision-question">先写临床问题，再选择检查。只有结果可能改变管理时，进阶检查才有意义。</p>
+      <div class="two">
+        <label>当前最需要回答的临床问题
+          <textarea id="testClinicalQuestion" placeholder="如：呼吸困难是否提示新发心衰？结果会影响延期优化、监测或术后去向吗？"></textarea>
+        </label>
+        <label>检查选择或不检查的理由
+          <textarea id="testIndicationRationale" placeholder="结合手术风险、症状、功能容量、既有资料和患者目标说明。"></textarea>
+        </label>
+      </div>
       <p class="hint">BNP/NT-proBNP、肌钙蛋白与 ECG 独立展示；数值必须结合本院检测方法、参考范围和临床背景解释。</p>
       <div class="two">
         <label>最近 ECG
@@ -1953,9 +2198,51 @@
         <label class="check"><input id="dyspneaOrChange" type="checkbox">存在呼吸困难或临床状态变化</label>
       </div>
       <div id="creatinineStatus" class="pill" style="margin-top: 12px;" role="status" aria-live="polite">肌酐 &gt;177 μmol/L：未判断</div>
+
+      <details class="compact-details">
+        <summary>按需记录进阶检查（不自动生成指征）</summary>
+        <div class="compact-details-body two">
+          <label>进阶检查类型
+            <select id="advancedTestType">
+              <option value="">未选择/不需要</option>
+              <option value="负荷试验">负荷试验</option>
+              <option value="CPET">心肺运动试验（CPET）</option>
+              <option value="CCTA">冠状动脉CT血管成像（CCTA）</option>
+              <option value="ICA">有创冠脉造影（ICA）</option>
+              <option value="其他">其他</option>
+            </select>
+          </label>
+          <label>已有结果/状态
+            <input id="advancedTestResult" type="text" placeholder="未做、已预约、日期及正式结论">
+          </label>
+          <label>该检查将改变什么管理
+            <textarea id="testManagementImpact" placeholder="如不改变延期、优化、麻醉计划、术后监测或患者选择，应重新审视检查价值。"></textarea>
+          </label>
+          <label>术后心血管监测计划
+            <textarea id="postopSurveillancePlan" placeholder="记录监护级别、ECG/肌钙蛋白等计划及责任团队；遵循本院流程。"></textarea>
+          </label>
+        </div>
+      </details>
+      <details class="compact-details">
+        <summary>药物核对（只记录，不自动生成停药/启药处方）</summary>
+        <div class="compact-details-body two">
+          <label>抗血小板/抗凝药
+            <input id="medAntithrombotic" type="text" placeholder="药名、剂量、最后用药及方案来源">
+          </label>
+          <label>β受体阻滞剂/抗心律失常药
+            <input id="medRateRhythm" type="text" placeholder="记录现状与需确认事项">
+          </label>
+          <label>他汀/RAAS/心衰治疗
+            <input id="medCardiac" type="text" placeholder="记录现状与需确认事项">
+          </label>
+          <label>SGLT2 抑制剂等高风险围术期用药
+            <input id="medHighRisk" type="text" placeholder="仅记录，由本院药物流程和上级医师决定">
+          </label>
+        </div>
+      </details>
     </section>
 
-    <section id="respiratorySection" class="card respiratory-layer" aria-labelledby="respiratory-title" data-mobile-step="3">
+    <section id="respiratorySection" class="card respiratory-layer" aria-labelledby="respiratory-title" data-mobile-step="4">
       <p class="eyebrow">Candidate / in_review · Respiratory reserve</p>
       <h2 id="respiratory-title">5A. 呼吸风险补充层</h2>
       <p class="hint">先识别症状、近期变化与呼吸支持，再判断是否需要肺功能或动脉血气。两项检查均不是所有患者的术前常规必查项目。</p>
@@ -2089,8 +2376,8 @@
       <div class="rights-lock">边界：本层为 KC-2026-011 / IA-2026-004 `candidate/in_review`。不常规要求肺功能或血气，不自动解释阈值，不自动转诊或决定手术。</div>
     </section>
 
-    <section id="rcriSection" class="card" aria-labelledby="rcri-title" data-mobile-step="2">
-      <h2 id="rcri-title">6. RCRI 教学评分</h2>
+    <section id="rcriSection" class="card" aria-labelledby="rcri-title" data-mobile-step="3">
+      <h2 id="rcri-title">3. RCRI 基线风险教学评分</h2>
       <p class="hint">勾选 RCRI 评分项目后自动计算总分；上方手术信息、心脏病史和肌酐结果也会同步勾选对应项目。</p>
       <div class="checkbox-grid">
         <label class="check"><input id="rcriHighRiskSurgery" class="rcri-item" type="checkbox">高危手术</label>
@@ -2107,8 +2394,9 @@
       </ul>
     </section>
 
-    <section id="recommendSection" class="card" aria-labelledby="recommend-title" data-mobile-step="3">
-      <h2 id="recommend-title">7. 学员独立判断与教学提示</h2>
+    <section id="recommendSection" class="card" aria-labelledby="recommend-title" data-mobile-step="5">
+      <p class="eyebrow">Gate 5 · Decision and alternatives</p>
+      <h2 id="recommend-title">6. 学员综合判断、路径比较与教学提示</h2>
       <div class="small-note">先完成自己的风险判断和计划，再提交解锁系统教学提示。系统提示不是标准答案，也不替代上级医师审核。</div>
       <div class="trainee-workspace">
         <h3>学员初评</h3>
@@ -2116,8 +2404,8 @@
           <label>我的风险判断与依据
             <textarea id="traineeJudgment" placeholder="用自己的话说明主要风险、依据、需要排除的问题和不确定性。"></textarea>
           </label>
-          <label>我的评估与围术期计划
-            <textarea id="traineePlan" placeholder="说明拟补充的信息、检查或优化方向，以及是否需要MDT；不要直接复制系统提示。"></textarea>
+          <label>我的评估、替代路径与围术期计划
+            <textarea id="traineePlan" placeholder="比较原计划、优化后进行、调整方案或非手术路径；说明检查是否改变管理、术后监测与是否需要MDT。"></textarea>
           </label>
         </div>
         <div class="button-row">
@@ -2131,11 +2419,11 @@
       <ul id="recommendations" class="result-list"></ul>
     </section>
 
-    <section id="mdtSection" class="card mdt-card" aria-labelledby="mdt-title" data-mobile-step="4">
+    <section id="mdtSection" class="card mdt-card" aria-labelledby="mdt-title" data-mobile-step="5">
       <div class="mdt-header">
         <div>
           <p class="eyebrow">人工会诊闭环 · 非自动决策</p>
-          <h2 id="mdt-title">8. 围术期 MDT 麻醉会诊工作台</h2>
+          <h2 id="mdt-title">7. 围术期 MDT 共享决策与行动闭环</h2>
         </div>
         <span class="review-badge">AKB V2.1.1 · in_review</span>
       </div>
@@ -2221,8 +2509,8 @@
       <div class="small-note">流程依据：AKB-GUIDELINE-015、032–037；AKB-LIT-035–041；AKB-CASE-001–004；KC-2026-009。全部为 <code>in_review/context_only</code>，不得驱动自动临床规则。</div>
     </section>
 
-    <section id="reportSection" class="card" aria-labelledby="report-title" data-mobile-step="5">
-      <h2 id="report-title">9. 一键复制综合评估报告</h2>
+    <section id="reportSection" class="card" aria-labelledby="report-title" data-mobile-step="6">
+      <h2 id="report-title">8. 一键复制分步评估报告</h2>
       <div class="button-row">
         <button type="button" onclick="generateReport()">生成评估报告</button>
         <button type="button" class="secondary" onclick="copyReport()">复制评估报告</button>
@@ -2234,18 +2522,18 @@
       <div class="small-note">本工具仅用于教学和临床辅助评估，不替代医生最终判断。</div>
     </section>
 
-    <section id="teacherReviewSection" class="card teacher-review-card" aria-labelledby="teacher-review-title" data-mobile-step="5" hidden>
+    <section id="teacherReviewSection" class="card teacher-review-card" aria-labelledby="teacher-review-title" data-mobile-step="6" hidden>
       <p class="eyebrow">Formative review · 不自动判定合格</p>
-      <h2 id="teacher-review-title">10. 教师形成性评价</h2>
+      <h2 id="teacher-review-title">9. 教师形成性评价</h2>
       <p class="hint">教师评价基于学员提交时的快照。评分用于反馈学习进展，不作为出科、结业或独立执业资格判定。</p>
 
       <h3>学员提交快照</h3>
       <div id="traineeSubmissionSnapshot" class="small-note submission-snapshot">尚无提交快照。</div>
 
       <div class="teacher-scorecard">
-        <h3>五维观察评分</h3>
+        <h3>临床路径五维观察评分</h3>
         <div class="teacher-score-grid">
-          <label>信息完整性
+          <label>时效与获益
             <select id="teacherInfoScore">
               <option value="">未评分</option>
               <option value="1">1 需直接指导</option>
@@ -2255,7 +2543,7 @@
               <option value="5">5 独立且系统</option>
             </select>
           </label>
-          <label>风险推理
+          <label>急性安全门禁
             <select id="teacherReasoningScore">
               <option value="">未评分</option>
               <option value="1">1 需直接指导</option>
@@ -2265,7 +2553,7 @@
               <option value="5">5 独立且深入</option>
             </select>
           </label>
-          <label>计划合理性
+          <label>风险与生理储备
             <select id="teacherPlanScore">
               <option value="">未评分</option>
               <option value="1">1 需直接指导</option>
@@ -2275,7 +2563,7 @@
               <option value="5">5 权衡充分</option>
             </select>
           </label>
-          <label>沟通与MDT
+          <label>检查审慎性
             <select id="teacherCommunicationScore">
               <option value="">未评分</option>
               <option value="1">1 需直接指导</option>
@@ -2285,7 +2573,7 @@
               <option value="5">5 能推动闭环</option>
             </select>
           </label>
-          <label>呼吸风险识别
+          <label>共享决策与闭环
             <select id="teacherRespiratoryScore">
               <option value="">未评分</option>
               <option value="1">1 需直接指导</option>
@@ -2330,11 +2618,11 @@
 
   <div id="mobileFlowActions" class="mobile-flow-actions" aria-label="手机端步骤操作">
     <button id="mobileFlowPrev" type="button" class="secondary mobile-flow-secondary">上一步</button>
-    <button id="mobileFlowNext" type="button" class="mobile-flow-primary">下一步：RCRI</button>
+    <button id="mobileFlowNext" type="button" class="mobile-flow-primary">下一步：急性安全门禁</button>
   </div>
 
   <footer class="footer-note">
-    v0.10.0 Respiratory Candidate Layer · AKB V2.1.1 · MDT Roundtable
+    v0.11.0 Stepwise Cardiovascular Decision Gate · candidate/in_review · AKB V2.1.1
   </footer>
 
   <!-- JavaScript 数据与逻辑区 -->
@@ -2343,7 +2631,7 @@
     // OPC-AKB-SNAPSHOT:START
     const OPC_KNOWLEDGE_SNAPSHOT = {
           "version": "AKB V2.1.1 / OPC Self-Growing Knowledge Loop",
-          "snapshotDate": "2026-07-29",
+          "snapshotDate": "2026-08-01",
           "generatedBy": "tools/akb_iteration_engine.py",
           "canonicalStore": "Obsidian AKB Markdown",
           "knowledgeHash": "fa485ce8a45a088668f51eb9",
@@ -2444,6 +2732,20 @@
                       "role": "术前呼吸风险补充层影响评估"
                 },
                 {
+                      "id": "KC-2026-012",
+                      "note": "[[Knowledge_Candidate_Stepwise_Cardiovascular_Decision_Gate]]",
+                      "status": "in_review",
+                      "evidence": "unreviewed",
+                      "role": "非心脏手术术前分步心血管决策门禁候选方案"
+                },
+                {
+                      "id": "IA-2026-005",
+                      "note": "[[Impact_Assessment_Stepwise_Cardiovascular_Decision_Gate]]",
+                      "status": "in_review",
+                      "evidence": "unreviewed",
+                      "role": "非心脏手术术前分步心血管决策门禁影响评估"
+                },
+                {
                       "id": "AKB-INDEX-GUIDELINE",
                       "note": "[[Guideline_Index]]",
                       "status": "active",
@@ -2462,8 +2764,8 @@
     // OPC-AKB-SNAPSHOT:END
     const OPC_RULES = {
       gate: "OPC 知识库门禁：AKB 尚无 verified 围术期心血管综合；以下内容按 draft/in_review 教学规则快照生成，不作为临床结论。",
-      emergency: "急诊手术：优先处理急诊手术需求，建议围术期加强监测，不因常规检查延误抢救性手术。",
-      activeCardiac: "存在较高心血管风险，择期手术建议进一步心内科评估或优化后再行手术。",
+      emergency: "立即/紧急手术：不得因常规风险资料缺失自动延误；应同步复苏、监测并由高级别团队权衡时间代价。",
+      activeCardiac: "急性心脏安全门禁存在阳性或不确定项：下一步必须结合手术时效，由高年资麻醉医师及相关专科人工判断。",
       rcri0: "RCRI 0 分：教学分层提示较低风险。",
       rcri1: "RCRI 1 分：教学分层提示风险升高。",
       rcri2: "RCRI ≥2 分：教学分层提示中高风险，建议结合手术风险、功能状态和生物标志物综合判断。",
@@ -2480,23 +2782,24 @@
     };
     const MDT_EVIDENCE = {
       status: "in_review/context_only",
-      sources: "AKB-GUIDELINE-015、032–037；AKB-LIT-035–041；AKB-CASE-001–004；KC-2026-009；KC-2026-011",
+      sources: "AKB-GUIDELINE-015、032–037；AKB-LIT-035–041；AKB-CASE-001–004；KC-2026-009；KC-2026-011；KC-2026-012",
       boundary: "仅支持信息整合、会诊文书、任务闭环和共享决策；不自动触发会诊，不判定能否手术，不生成治疗处方。"
     };
     const RCRI_ITEMS = [
       { id: "rcriHighRiskSurgery", label: "高危手术", active: () => isHighRiskSurgery() },
       { id: "rcriIhd", label: "缺血性心脏病", active: () => hasIschemicHeartDisease() },
-      { id: "rcriHeartFailure", label: "心力衰竭", active: () => checked("heartFailure") || checked("decompensatedHF") },
+      { id: "rcriHeartFailure", label: "心力衰竭", active: () => checked("heartFailure") || value("hfGateStatus") === "present" },
       { id: "rcriStroke", label: "脑血管病", active: () => checked("stroke") },
       { id: "rcriInsulinDiabetes", label: "胰岛素治疗糖尿病", active: () => checked("insulinDiabetes") },
       { id: "rcriCreatinine", label: "肌酐 >2.0 mg/dL 或 >177 μmol/L", active: () => isCreatinineHigh() }
     ];
     const MOBILE_FLOW_STEPS = [
-      { id: 1, title: "基础资料" },
-      { id: 2, title: "RCRI 主评估" },
-      { id: 3, title: "补充风险画像" },
-      { id: 4, title: "MDT 会诊" },
-      { id: 5, title: "综合报告" }
+      { id: 1, title: "手术时效与获益" },
+      { id: 2, title: "急性安全门禁" },
+      { id: 3, title: "基线风险" },
+      { id: 4, title: "生理储备与检查" },
+      { id: 5, title: "决策与 MDT" },
+      { id: 6, title: "报告与反馈" }
     ];
     const MOBILE_FLOW_MEDIA = window.matchMedia("(max-width: 719px)");
     let mobileFlowStep = 1;
@@ -2606,7 +2909,7 @@
       educationMode = mode === "teacher" ? "teacher" : "trainee";
       updateEducationModeUI();
       if (educationMode === "teacher" && MOBILE_FLOW_MEDIA.matches) {
-        showMobileFlowStep(5);
+        showMobileFlowStep(6);
       }
     }
 
@@ -2617,12 +2920,14 @@
       return [
         "学员术前评估提交快照",
         "提交时间：" + new Date().toLocaleString("zh-CN", { hour12: false }),
-        "产品版本：v0.10.0 / AKB V2.1.1 / " + OPC_KNOWLEDGE_SNAPSHOT.knowledgeHash,
+        "产品版本：v0.11.0 / AKB V2.1.1 / " + OPC_KNOWLEDGE_SNAPSHOT.knowledgeHash,
         "",
         "病例范围",
         "年龄/性别：" + (value("age") || "未填写") + " / " + (value("sex") || "未填写"),
         "拟行手术：" + (value("surgeryName") || "未填写"),
         "手术时机/风险：" + (value("surgeryTiming") || "未填写") + " / " + (value("surgeryRisk") || "未填写"),
+        "预期获益/延误伤害：" + (value("surgeryBenefit") || "未填写") + " / " + (value("delayHarm") || "未填写"),
+        "急性心脏门禁：" + safetyGateText(),
         "",
         "结构化结果（仅供形成性反馈）",
         "RCRI：" + rcri.score + " 分；" + (rcri.reasons.length ? rcri.reasons.join("、") : "无得分项目"),
@@ -2727,11 +3032,11 @@
         "评价依据：学员提交快照；本评价不自动判定合格。",
         "",
         "五维观察",
-        "信息完整性：" + teacherScoreText("teacherInfoScore"),
-        "风险推理：" + teacherScoreText("teacherReasoningScore"),
-        "计划合理性：" + teacherScoreText("teacherPlanScore"),
-        "沟通与MDT：" + teacherScoreText("teacherCommunicationScore"),
-        "呼吸风险识别：" + teacherScoreText("teacherRespiratoryScore"),
+        "时效与获益：" + teacherScoreText("teacherInfoScore"),
+        "急性安全门禁：" + teacherScoreText("teacherReasoningScore"),
+        "风险与生理储备：" + teacherScoreText("teacherPlanScore"),
+        "检查审慎性：" + teacherScoreText("teacherCommunicationScore"),
+        "共享决策与闭环：" + teacherScoreText("teacherRespiratoryScore"),
         "已评分维度平均值：" + average + (numericScores.length ? "/5（仅作形成性趋势参考）" : ""),
         "建议监督级别：" + (value("teacherSupervision") || "未选择"),
         "",
@@ -2777,7 +3082,8 @@
     }
 
     function checked(id) {
-      return $(id).checked;
+      const control = $(id);
+      return Boolean(control && control.checked);
     }
 
     function numberValue(id) {
@@ -2788,6 +3094,63 @@
 
     function yesNoText(flag) {
       return flag ? "是" : "否";
+    }
+
+    function gateStatusLabel(status) {
+      return {
+        unassessed: "未评估",
+        absent: "未发现",
+        present: "存在",
+        uncertain: "不确定"
+      }[status] || "未评估";
+    }
+
+    function safetyGateAssessment() {
+      const items = [
+        { label: "急性冠脉综合征", status: value("acsGateStatus") },
+        { label: "失代偿性心衰", status: value("hfGateStatus") },
+        { label: "不稳定/严重心律失常", status: value("arrhythmiaGateStatus") }
+      ];
+      return {
+        items,
+        positive: items.filter(item => item.status === "present"),
+        uncertain: items.filter(item => item.status === "uncertain"),
+        unassessed: items.filter(item => item.status === "unassessed")
+      };
+    }
+
+    function safetyGateText() {
+      return safetyGateAssessment().items
+        .map(item => item.label + "=" + gateStatusLabel(item.status))
+        .join("；");
+    }
+
+    function updateSafetyGate() {
+      const gate = safetyGateAssessment();
+      const status = $("safetyGateSummary");
+      if (gate.positive.length) {
+        status.className = "status red";
+        status.textContent = "门禁阳性：" + gate.positive.map(item => item.label).join("、") + "。需结合手术时效人工升级评估。";
+      } else if (gate.uncertain.length) {
+        status.className = "status yellow";
+        status.textContent = "门禁不确定：" + gate.uncertain.map(item => item.label).join("、") + "。先补足能改变决策的信息。";
+      } else if (gate.unassessed.length) {
+        status.className = "status yellow";
+        status.textContent = "门禁尚未完成：" + gate.unassessed.map(item => item.label).join("、") + "仍未评估。";
+      } else {
+        status.className = "status green";
+        status.textContent = "三类急性不稳定心脏状态均记录为未发现；仍需结合病史、症状和临床判断。";
+      }
+      return gate;
+    }
+
+    function hasAcuteCardiacConcern() {
+      const gate = safetyGateAssessment();
+      return gate.positive.length > 0 || gate.uncertain.length > 0;
+    }
+
+    function isTimeCriticalSurgery() {
+      return value("surgeryTiming") === "立即" || value("surgeryTiming") === "紧急";
     }
 
     function opcRule(ruleKey) {
@@ -3050,7 +3413,7 @@
     }
 
     function hasIschemicHeartDisease() {
-      return checked("cad") || checked("mi") || checked("pci") || checked("cabg") || checked("unstableAngina");
+      return checked("cad") || checked("mi") || checked("pci") || checked("cabg") || value("acsGateStatus") === "present";
     }
 
     function syncRCRIItems() {
@@ -3121,11 +3484,7 @@
     }
 
     function hasActiveCardiacRisk() {
-      return value("troponin") === "升高" ||
-        checked("unstableAngina") ||
-        checked("decompensatedHF") ||
-        checked("seriousArrhythmia") ||
-        checked("severeValveDisease");
+      return hasAcuteCardiacConcern();
     }
 
     function isIntermediateOrHighRisk(rcriScore) {
@@ -3139,7 +3498,7 @@
       const intermediateOrHigh = isIntermediateOrHighRisk(rcri.score);
       const lvef = numberValue("lvef");
 
-      if (value("surgeryTiming") === "急诊") {
+      if (isTimeCriticalSurgery()) {
         recommendations.push(opcRule("emergency"));
       }
 
@@ -3175,7 +3534,7 @@
 
       if (
         checked("heartFailure") ||
-        checked("decompensatedHF") ||
+        value("hfGateStatus") === "present" ||
         checked("valveDisease") ||
         checked("severeValveDisease") ||
         checked("dyspneaOrChange") ||
@@ -3222,10 +3581,13 @@
     function mdtCandidateSignals() {
       const rcri = calculateRCRI();
       const signals = [];
-      if (hasActiveCardiacRisk()) signals.push("现有评估出现活动性/不稳定心脏风险提示");
+      if (hasAcuteCardiacConcern()) signals.push("急性心脏安全门禁存在阳性或不确定项");
       if (isHighRiskSurgery()) signals.push("现有评估标记为高危手术");
       if (rcri.score >= 2) signals.push("现有教学评分 RCRI ≥2");
       if (checked("pacemaker") || checked("icd")) signals.push("存在 CIED 围术期协调事项");
+      if (checked("severeValveDisease")) signals.push("严重瓣膜病属于高影响风险修饰因子");
+      if (checked("severePulmonaryHypertension")) signals.push("严重肺动脉高压/右心负荷需要专科与资源协调");
+      if ((checked("pci") || checked("cabg")) && value("cardiologyPlanStatus") !== "已有书面方案") signals.push("血运重建/抗栓背景尚无已确认书面方案");
       if (value("surgeryTiming") === "择期" && value("surgeryRisk") === "高危") signals.push("择期高危手术可能需要预留优化和资源协调时间");
       return signals;
     }
@@ -3248,6 +3610,10 @@
         "一、会诊问题与手术时效性",
         "拟行手术：" + (value("surgeryName") || "未填写"),
         "手术时机/风险：" + (value("surgeryTiming") || "未填写") + " / " + (value("surgeryRisk") || "未填写"),
+        "手术预期获益：" + (value("surgeryBenefit") || "未填写"),
+        "延误/取消潜在伤害：" + (value("delayHarm") || "未填写"),
+        "急性心脏安全门禁：" + safetyGateText(),
+        "门禁依据/待澄清：" + (value("safetyGateBasis") || "未填写"),
         "具体问题：" + (value("mdtQuestion") || "未填写"),
         "人工确认的触发原因：" + (triggers.length ? triggers.join("；") : "未填写"),
         "系统候选线索：" + (signals.length ? signals.join("；") : "无；仍需人工判断"),
@@ -3255,6 +3621,10 @@
           "；DASI " + (layers.dasiScore === null ? "未录入" : layers.dasiScore + " 分") +
           "；脆弱性 " + (!layers.frailtyTool ? "未选择" : layers.frailtyTool + " " + (layers.frailtyScore === null ? "未录入" : layers.frailtyScore + " 分")),
         "风险修饰因子：ECG " + value("ecg") + "；" + natriureticText() + "；肌钙蛋白 " + value("troponin"),
+        "目标导向检查：临床问题=" + (value("testClinicalQuestion") || "未填写") +
+          "；选择理由=" + (value("testIndicationRationale") || "未填写") +
+          "；进阶检查=" + (value("advancedTestType") || "未选择") +
+          "；管理影响=" + (value("testManagementImpact") || "未填写"),
         "呼吸风险补充层（candidate/in_review）：SpO₂ " + (respiratory.spo2 === null ? "未录入" : respiratory.spo2 + "%") +
           "；基线 " + (respiratory.baseline || "未评估") +
           "；呼吸线索 " + (respiratory.conditions.length ? respiratory.conditions.join("、") : "未勾选"),
@@ -3276,6 +3646,7 @@
         "完成时限：" + (value("mdtDeadline") || "未填写"),
         "复评节点/条件：" + (value("mdtReassessment") || "未填写"),
         "术后预计去向：" + (value("mdtPostopDestination") || "待讨论"),
+        "术后心血管监测计划：" + (value("postopSurveillancePlan") || "未填写"),
         "",
         "五、Evidence / Inference / Clinical Opinion",
         "Evidence：当前来源均为 " + MDT_EVIDENCE.status + "；" + MDT_EVIDENCE.sources + "。",
@@ -3316,10 +3687,10 @@
         ["脑血管病史", "stroke"],
         ["胰岛素治疗糖尿病", "insulinDiabetes"],
         ["慢性肾功能不全", "ckd"],
-        ["新近或不稳定心绞痛", "unstableAngina"],
-        ["失代偿心衰", "decompensatedHF"],
-        ["严重心律失常", "seriousArrhythmia"],
-        ["严重瓣膜病", "severeValveDisease"]
+        ["严重瓣膜病", "severeValveDisease"],
+        ["严重肺动脉高压/右心负荷", "severePulmonaryHypertension"],
+        ["近期卒中/TIA", "recentStroke"],
+        ["近期心衰住院", "recentHeartFailureAdmission"]
       ];
 
       return items.filter(([_, id]) => checked(id)).map(([label]) => label);
@@ -3341,72 +3712,62 @@
       const respiratory = respiratoryAssessment();
 
       const report = [
-        "心脏病患者接受非心脏手术术前麻醉评估报告",
+        "非心脏手术术前分步心血管评估与 MDT 报告",
+        "版本：v0.11.0 Stepwise Cardiovascular Decision Gate / candidate-in_review",
         "",
-        "一、OPC/AKB 知识库依据",
-        knowledgeBasisText(),
+        "一、手术时效、意义与患者目标",
+        "拟行手术：" + (value("surgeryName") || "未填写"),
+        "手术时效/风险：" + (value("surgeryTiming") || "未填写") + " / " + (value("surgeryRisk") || "未填写"),
+        "预期获益：" + (value("surgeryBenefit") || "未填写"),
+        "延误或取消的潜在伤害：" + (value("delayHarm") || "未填写"),
+        "患者最重视的结局：" + (value("earlyPatientGoal") || value("mdtPatientGoals") || "未填写"),
         "",
-        "二、患者基本信息",
-        "年龄：" + (value("age") || "未填写"),
-        "性别：" + (value("sex") || "未填写"),
-        "身高：" + (value("height") ? value("height") + " cm" : "未填写"),
-        "体重：" + (value("weight") ? value("weight") + " kg" : "未填写"),
-        "BMI：" + (value("bmi") || "未计算"),
-        "ASA 分级：" + (value("asa") || "未填写"),
+        "二、急性心脏安全门禁",
+        safetyGateText(),
+        "门禁依据/待澄清：" + (value("safetyGateBasis") || "未填写"),
+        "说明：未评估不等于未发现；下一步须结合手术时效人工判断。",
         "",
-        "三、手术信息",
-        "手术名称：" + (value("surgeryName") || "未填写"),
-        "手术时机：" + (value("surgeryTiming") || "未填写"),
-        "手术风险：" + (value("surgeryRisk") || "未填写"),
-        "是否为 RCRI 高危手术：" + yesNoText(isHighRiskSurgery()),
+        "三、患者背景与基线心血管风险",
+        "年龄/性别/ASA：" + (value("age") || "未填写") + " / " + (value("sex") || "未填写") + " / " + (value("asa") || "未填写"),
+        "BMI/血压/心率：" + (value("bmi") || "未计算") + " / " + (value("restingBp") || "未填写") + " / " + (value("restingHr") || "未填写"),
+        "心血管病史与修饰因子：" + (history.length ? history.join("、") : "未勾选"),
+        "RCRI 教学评分：" + rcri.score + " 分；" + (rcri.reasons.length ? rcri.reasons.join("、") : "暂无得分项目"),
+        "SORT总体30天死亡风险（外部结果）：" + (layers.sortRisk === null ? "未录入" : layers.sortRisk + "%"),
+        "边界：RCRI与SORT预测目标不同，不合并总分；本页不运行SORT算法。",
         "",
-        "四、心脏病史",
-        history.length ? history.join("、") : "未勾选明确心脏病史或相关高危病史",
+        "四、功能、脆弱性与心肺储备",
+        "DASI：" + (layers.dasiScore === null ? "未录入" : layers.dasiScore + " 分"),
+        "简化活动询问：" + mets.label + "；可完成 " + mets.count + "/4项",
+        "脆弱性：" + (!layers.frailtyTool ? "未选择 CFS/FRAIL" : layers.frailtyTool + " " + (layers.frailtyScore === null ? "未录入" : layers.frailtyScore + " 分")),
+        "呼吸基线/SpO₂：" + (respiratory.baseline || "未评估") + " / " + (respiratory.spo2 === null ? "未录入" : respiratory.spo2 + "%") + "（" + (value("spo2OxygenContext") || "条件未记录") + "）",
+        "呼吸线索：" + (respiratory.conditions.length ? respiratory.conditions.join("、") : "未勾选"),
+        "肺功能/血气：" + pulmonaryFunctionText(respiratory) + " / " + arterialBloodGasText(respiratory),
         "",
-        "五、分层风险画像（candidate/in_review；各层独立，不合并总分）",
-        "总体30天死亡风险（SORT，手工录入）：" + (layers.sortRisk === null ? "未录入" : layers.sortRisk + "%"),
-        "功能容量（DASI）：" + (layers.dasiScore === null ? "未录入" : layers.dasiScore + " 分"),
-        "老年脆弱性：" + (!layers.frailtyTool ? "未选择 CFS/FRAIL" : layers.frailtyTool + " " + (layers.frailtyScore === null ? "未录入分数" : layers.frailtyScore + " 分")),
-        "边界：不在本系统运行 SORT、不复制 DASI/CFS/FRAIL 完整量表、不自动解释候选阈值。",
+        "五、风险修饰因子与目标导向检查",
+        "临床问题：" + (value("testClinicalQuestion") || "未填写"),
+        "选择/不选择检查的理由：" + (value("testIndicationRationale") || "未填写"),
+        "ECG/Echo/LVEF：" + value("ecg") + " / " + value("echo") + " / " + (value("lvef") ? value("lvef") + "%" : "未填写"),
+        "BNP或NT-proBNP：" + natriureticText(),
+        "肌钙蛋白/肌酐：" + value("troponin") + " / " + (creatinine ? creatinine + " μmol/L" : "未填写"),
+        "进阶检查及既有结果：" + (value("advancedTestType") || "未选择") + " / " + (value("advancedTestResult") || "未填写"),
+        "预期管理影响：" + (value("testManagementImpact") || "未填写"),
+        "呼吸检查理由/影响：" + (value("respTestRationale") || "未填写") + " / " + (value("respManagementImpact") || "未填写"),
+        "药物核对：抗栓=" + (value("medAntithrombotic") || "未记录") + "；心率/节律=" + (value("medRateRhythm") || "未记录") + "；心血管/心衰=" + (value("medCardiac") || "未记录") + "；其他高风险=" + (value("medHighRisk") || "未记录"),
+        "边界：以上只记录临床问题和既有结果，不自动生成检查指征、阈值解释或停药处方。",
         "",
-        "六、简化活动询问（教学辅助，不替代 DASI）",
-        mets.label,
-        "已勾选可完成活动数量：" + mets.count + "/4",
-        "",
-        "七、RCRI 教学评分",
-        "RCRI = " + rcri.score,
-        "得分原因：",
-        rcri.reasons.length ? rcri.reasons.map(reason => "✓ " + reason).join("\n") : "暂无得分项目",
-        "",
-        "八、风险修饰因子与检查结果",
-        "最近 ECG：" + value("ecg"),
-        "最近 Echo：" + value("echo"),
-        "LVEF：" + (value("lvef") ? value("lvef") + "%" : "未填写"),
-        "BNP / NT-proBNP：" + natriureticText(),
-        "肌钙蛋白：" + value("troponin"),
-        "肌酐：" + (creatinine ? creatinine + " μmol/L" : "未填写"),
-        "是否肌酐 >177 μmol/L：" + (creatinine ? yesNoText(isCreatinineHigh()) : "未判断"),
-        "呼吸困难或临床状态变化：" + yesNoText(checked("dyspneaOrChange")),
-        "",
-        "九、呼吸风险补充层（candidate/in_review）",
-        "静息SpO₂/测量条件：" + (respiratory.spo2 === null ? "未录入" : respiratory.spo2 + "%") + " / " + (value("spo2OxygenContext") || "未记录"),
-        "当前呼吸状态相对基线：" + (respiratory.baseline || "未评估"),
-        "呼吸疾病与支持线索：" + (respiratory.conditions.length ? respiratory.conditions.join("、") : "未勾选"),
-        "最近呼吸专科评估：" + (value("respiratoryReview") || "未记录"),
-        "肺功能：" + pulmonaryFunctionText(respiratory),
-        "动脉血气：" + arterialBloodGasText(respiratory),
-        "学员检查选择理由：" + (value("respTestRationale") || "未填写"),
-        "预期管理影响：" + (value("respManagementImpact") || "未填写"),
-        "呼吸/重症MDT问题：" + (value("respMdtQuestion") || "未填写"),
-        "边界：肺功能和血气不是所有患者常规必查；本系统不自动解释阈值或作出手术决定。",
-        "",
-        "十、辅助评估建议",
+        "六、学员判断与教学提示",
+        "学员判断：" + (value("traineeJudgment") || "未填写"),
+        "学员路径比较与计划：" + (value("traineePlan") || "未填写"),
         reportRecommendations.map((text, index) => (index + 1) + ". " + text).join("\n"),
         "",
-        "十一、围术期 MDT 麻醉会诊草稿",
+        "七、共享决策、行动闭环与术后计划",
+        "术后心血管监测计划：" + (value("postopSurveillancePlan") || "未填写"),
         mdtDraft,
         "",
-        "十二、免责声明",
+        "八、OPC/AKB 知识依据与边界",
+        knowledgeBasisText(),
+        "",
+        "九、免责声明",
         DISCLAIMER
       ].join("\n");
 
@@ -3473,6 +3834,7 @@
 
     function updateAll() {
       calculateBMI();
+      updateSafetyGate();
       updateFrailtyInput();
       layeredAssessment();
       respiratoryAssessment();
@@ -3494,6 +3856,15 @@
     document.addEventListener("input", handleFormChange);
     document.addEventListener("change", handleFormChange);
     document.addEventListener("DOMContentLoaded", function () {
+      const main = document.querySelector("main");
+      [
+        "surgerySection", "patientSection", "safetyGateSection", "historySection",
+        "rcriSection", "layerSection", "examSection", "respiratorySection",
+        "recommendSection", "mdtSection", "reportSection", "teacherReviewSection"
+      ].forEach(id => {
+        const section = $(id);
+        if (section) main.appendChild(section);
+      });
       initializeRiskCards();
       initializeMobileFlow();
       initializeEducationModes();
