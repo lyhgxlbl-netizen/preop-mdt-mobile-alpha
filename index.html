@@ -1667,6 +1667,17 @@
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
     }
+    /* v0.12 modules */
+    .pref-hidden { display: none !important; }
+    .table-scroll { overflow-x: auto; max-width: 100%; }
+    .asa-table { border-collapse: collapse; font-size: 0.85rem; min-width: 640px; }
+    .asa-table th, .asa-table td { border: 1px solid #d0d7de; padding: 6px; vertical-align: top; text-align: left; }
+    .asa-table tr.asa-selected { background: #fff4c2; }
+    .module-prefs-list { list-style: none; padding: 0; display: grid; gap: 8px; }
+    .module-prefs-list li { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+    .module-prefs-list li span { flex: 1 1 140px; font-weight: 600; }
+    .module-prefs-list button { min-height: 40px; padding: 6px 12px; }
+    @media (max-width: 719px) { .asa-table { font-size: 0.78rem; } #pasteSummary { min-height: 160px; } }
   </style>
 </head>
 
@@ -2376,6 +2387,117 @@
       <div class="rights-lock">边界：本层为 KC-2026-011 / IA-2026-004 `candidate/in_review`。不常规要求肺功能或血气，不自动解释阈值，不自动转诊或决定手术。</div>
     </section>
 
+    <section id="asaSection" class="card v012-module" aria-labelledby="asa-title" data-mobile-step="1" data-module-label="ASA-PS 2020">
+      <p class="eyebrow">Module · ASA-PS 2020 · candidate/in_review</p>
+      <h2 id="asa-title">ASA 身体状况分级（使用者自选）</h2>
+      <p class="hint">在“患者信息”中选择 ASA 分级；本模块显示 ASA 官方示例（2020-12-13 修订）供对照。系统不自动分级；ASA 声明指出最终分级由麻醉医师于麻醉当日评估患者后确定，且该分级单独不能预测围术期风险。</p>
+      <label class="check"><input id="asaEmergency" type="checkbox">急诊（加“E”：延误治疗将显著增加生命或肢体威胁）</label>
+      <div id="asaStatus" class="status yellow" role="status" aria-live="polite">ASA：未选择</div>
+      <details>
+        <summary>ASA 官方示例（英文原文要点，节选，含但不限于）</summary>
+        <div class="table-scroll"><table class="asa-table">
+          <thead><tr><th>分级</th><th>定义</th><th>成人</th><th>儿科</th><th>产科</th></tr></thead>
+          <tbody>
+            <tr data-asa="I"><td>I</td><td>A normal healthy patient</td><td>Healthy, non-smoking, no or minimal alcohol use</td><td>Healthy (no acute or chronic disease), normal BMI percentile for age</td><td>—</td></tr>
+            <tr data-asa="II"><td>II</td><td>Mild systemic disease</td><td>Current smoker, social alcohol drinker, pregnancy, obesity (30&lt;BMI&lt;40), well-controlled DM/HTN, mild lung disease</td><td>Asymptomatic congenital cardiac disease, well controlled dysrhythmias, asthma without exacerbation, well controlled epilepsy, mild/moderate OSA …</td><td>Normal pregnancy, well controlled gestational HTN, controlled preeclampsia without severe features, diet-controlled gestational DM</td></tr>
+            <tr data-asa="III"><td>III</td><td>Severe systemic disease</td><td>Poorly controlled DM or HTN, COPD, morbid obesity (BMI ≥40), active hepatitis, alcohol dependence or abuse, implanted pacemaker, moderate reduction of EF, ESRD on regularly scheduled dialysis, history (&gt;3 months) of MI, CVA, TIA, or CAD/stents</td><td>Uncorrected stable congenital cardiac abnormality, asthma with exacerbation, insulin dependent DM, severe OSA, premature infant PCA &lt;60 weeks, difficult airway, full term infants &lt;6 weeks …</td><td>Preeclampsia with severe features, gestational DM with complications or high insulin requirements, thrombophilic disease requiring anticoagulation</td></tr>
+            <tr data-asa="IV"><td>IV</td><td>Severe systemic disease that is a constant threat to life</td><td>Recent (&lt;3 months) MI, CVA, TIA or CAD/stents, ongoing cardiac ischemia or severe valve dysfunction, severe reduction of EF, shock, sepsis, DIC, ARD or ESRD not on regularly scheduled dialysis</td><td>Symptomatic congenital cardiac abnormality, CHF, shock, sepsis, DIC, AICD, ventilator dependence, severe trauma, severe respiratory distress, advanced oncologic state …</td><td>Preeclampsia with severe features complicated by HELLP or other adverse event, peripartum cardiomyopathy with EF &lt;40, uncorrected/decompensated heart disease</td></tr>
+            <tr data-asa="V"><td>V</td><td>Moribund, not expected to survive without the operation</td><td>Ruptured abdominal/thoracic aneurysm, massive trauma, intracranial bleed with mass effect, ischemic bowel with significant cardiac pathology or multiple organ/system dysfunction</td><td>Massive trauma, intracranial hemorrhage with mass effect, ECMO, respiratory failure or arrest, malignant hypertension, decompensated CHF, hepatic encephalopathy …</td><td>Uterine rupture</td></tr>
+            <tr data-asa="VI"><td>VI</td><td>Declared brain-dead, organ donation</td><td>—</td><td>—</td><td>—</td></tr>
+          </tbody>
+        </table></div>
+      </details>
+      <div class="small-note">来源：ASA Statement on ASA Physical Status Classification System（Committee on Economics，2014 批准，2020-12-13 修订）。节选，完整示例见 ASA 官网。</div>
+    </section>
+
+    <section id="airwaySection" class="card v012-module" aria-labelledby="airway-title" data-mobile-step="4" data-module-label="气道 / STOP-Bang">
+      <p class="eyebrow">Module · Airway & OSA screening · candidate/in_review</p>
+      <h2 id="airway-title">气道床旁记录与 STOP-Bang</h2>
+      <p class="hint">只记录发现；系统不输出“困难气道”结论，也不生成气道管理方案。气道计划需按科室流程与上级医师讨论（参见 ASA 2022 困难气道指南）。</p>
+      <div class="grid">
+        <label>Mallampati（改良，患者坐位）<select id="airwayMallampati"><option value="">未评估</option><option>I</option><option>II</option><option>III</option><option>IV</option><option value="无法配合">无法配合/无法评估</option></select></label>
+        <label>张口度（门齿间距，cm 或指宽）<input id="airwayMouthOpening" type="text" placeholder="如 4 cm / 3 指"></label>
+        <label>甲颏距离（cm）<input id="airwayThyromental" type="number" min="0" step="0.1" inputmode="decimal" placeholder="cm"></label>
+        <label>颈部活动度<select id="airwayNeck"><option value="">未评估</option><option>不受限</option><option>部分受限</option><option>明显受限</option></select></label>
+        <label>既往困难气道史<select id="airwayPriorDifficult"><option value="">未询问</option><option>否认</option><option>有（记录于下方）</option><option>不详</option></select></label>
+        <label>其他气道发现/记录<input id="airwayNotes" type="text" placeholder="如 义齿、小下颌、颈部放疗史"></label>
+      </div>
+      <h3>STOP-Bang（8 项，是/否）</h3>
+      <div class="grid stopbang-grid">
+        <label>S 大声打鼾<select id="sbSnoring" class="yn"><option value="">未答</option><option value="yes">是</option><option value="no">否</option></select></label>
+        <label>T 日间疲乏/嗜睡<select id="sbTired" class="yn"><option value="">未答</option><option value="yes">是</option><option value="no">否</option></select></label>
+        <label>O 被观察到睡眠呼吸暂停/憋醒<select id="sbObserved" class="yn"><option value="">未答</option><option value="yes">是</option><option value="no">否</option></select></label>
+        <label>P 高血压（或正在治疗）<select id="sbPressure" class="yn"><option value="">未答</option><option value="yes">是</option><option value="no">否</option></select></label>
+        <label>B BMI &gt;35 kg/m²<select id="sbBmi" class="yn"><option value="">未答</option><option value="yes">是</option><option value="no">否</option></select></label>
+        <label>A 年龄 &gt;50 岁<select id="sbAge" class="yn"><option value="">未答</option><option value="yes">是</option><option value="no">否</option></select></label>
+        <label>N 颈围 &gt;40 cm<select id="sbNeck" class="yn"><option value="">未答</option><option value="yes">是</option><option value="no">否</option></select></label>
+        <label>G 男性<select id="sbMale" class="yn"><option value="">未答</option><option value="yes">是</option><option value="no">否</option></select></label>
+      </div>
+      <div id="stopBangStatus" class="status yellow" role="status" aria-live="polite">STOP-Bang：未完成</div>
+      <div class="small-note">分层（Chung 2016）：0–2 低风险；5–8 高风险；3–4 中等，若 STOP ≥2 且 男性/BMI&gt;35/颈围&gt;40 cm 之一则为高风险。筛查工具，非 OSA 诊断。STOP-Bang 版权属 University Health Network。</div>
+    </section>
+
+    <section id="ariscatSection" class="card v012-module" aria-labelledby="ariscat-title" data-mobile-step="4" data-module-label="ARISCAT 肺部">
+      <p class="eyebrow">Module · Pulmonary · candidate/in_review</p>
+      <h2 id="ariscat-title">ARISCAT 术后肺部并发症风险（衔接呼吸层）</h2>
+      <p class="hint">年龄与 SpO₂ 可由上方患者信息和呼吸层自动带入（可手动更改）。独立显示，不与 RCRI/SORT 合并。</p>
+      <div class="grid">
+        <label>年龄<select id="ariAge"><option value="">未选</option><option value="le50">≤50 岁（0）</option><option value="51to80">51–80 岁（3）</option><option value="gt80">&gt;80 岁（16）</option></select></label>
+        <label>术前 SpO₂<select id="ariSpo2"><option value="">未选</option><option value="ge96">≥96%（0）</option><option value="91to95">91–95%（8）</option><option value="le90">≤90%（24）</option></select></label>
+        <label>近 1 个月呼吸道感染<select id="ariInfection"><option value="">未选</option><option value="no">否（0）</option><option value="yes">是（17）</option></select></label>
+        <label>术前贫血（Hb ≤10 g/dL）<select id="ariAnemia"><option value="">未选</option><option value="no">否（0）</option><option value="yes">是（11）</option></select></label>
+        <label>手术切口<select id="ariIncision"><option value="">未选</option><option value="peripheral">外周（0）</option><option value="upperAbdominal">上腹部（15）</option><option value="intrathoracic">胸腔内（24）</option></select></label>
+        <label>手术时长<select id="ariDuration"><option value="">未选</option><option value="lt2">&lt;2 h（0）</option><option value="2to3">2–3 h（16）</option><option value="gt3">&gt;3 h（23）</option></select></label>
+        <label>急诊手术<select id="ariEmergency"><option value="">未选</option><option value="no">否（0）</option><option value="yes">是（8）</option></select></label>
+      </div>
+      <div id="ariscatStatus" class="status yellow" role="status" aria-live="polite">ARISCAT：未完成</div>
+      <div class="small-note">分层：&lt;26 低；26–44 中；≥45 高（Canet 2010 验证子样本 PPC 发生率约 1.6% / 13.3% / 42.1%）。分值取自原文模型表的二手复现，待原文全文复核。</div>
+    </section>
+
+    <section id="ponvSection" class="card v012-module" aria-labelledby="ponv-title" data-mobile-step="4" data-module-label="PONV Apfel">
+      <p class="eyebrow">Module · PONV · candidate/in_review</p>
+      <h2 id="ponv-title">PONV：Apfel 简化评分</h2>
+      <div class="grid">
+        <label>女性<select id="apfelFemale" class="yn"><option value="">未答</option><option value="yes">是</option><option value="no">否</option></select></label>
+        <label>不吸烟<select id="apfelNonSmoker" class="yn"><option value="">未答</option><option value="yes">是</option><option value="no">否</option></select></label>
+        <label>PONV 或晕动病史<select id="apfelHistory" class="yn"><option value="">未答</option><option value="yes">是</option><option value="no">否</option></select></label>
+        <label>预计术后使用阿片类<select id="apfelOpioid" class="yn"><option value="">未答</option><option value="yes">是</option><option value="no">否</option></select></label>
+      </div>
+      <div id="apfelStatus" class="status yellow" role="status" aria-live="polite">Apfel：未完成</div>
+      <div class="small-note">Apfel 1999：0/1/2/3/4 个因素对应 PONV 发生率约 10%/21%/39%/61%/79%（成人、吸入麻醉人群）。Gan 2020 第四版共识仅作背景阅读；本页不生成止吐药物或剂量。</div>
+    </section>
+
+    <section id="vteDeliriumSection" class="card v012-module" aria-labelledby="vte-title" data-mobile-step="4" data-module-label="VTE / 谵妄">
+      <p class="eyebrow">Module · VTE & Delirium · candidate/in_review</p>
+      <h2 id="vte-title">VTE（Caprini 仅记录）与术后谵妄预测</h2>
+      <h3>Caprini（外部结果记录）</h3>
+      <p class="hint">Caprini RAM 存在多个版本（条目与分值不同），授权状态未核实，本页不复制条目、不运行算法，也不生成预防方案。请记录外部计算结果及所用版本。</p>
+      <div class="grid">
+        <label>Caprini 分数（外部）<input id="capriniScore" type="number" min="0" step="1" inputmode="numeric"></label>
+        <label>版本/来源<input id="capriniVersion" type="text" placeholder="如 2005 版 / 院内表单"></label>
+      </div>
+      <div id="capriniStatus" class="status yellow" role="status" aria-live="polite">Caprini：未录入</div>
+      <h3>术后谵妄临床预测规则（Marcantonio 1994）</h3>
+      <div class="grid">
+        <label>年龄 ≥70 岁<select id="delAge" class="yn"><option value="">未答</option><option value="yes">是</option><option value="no">否</option></select></label>
+        <label>自述酒精滥用<select id="delAlcohol" class="yn"><option value="">未答</option><option value="yes">是</option><option value="no">否</option></select></label>
+        <label>认知状态差（原文用 TICS，记录外部结果）<select id="delCognition" class="yn"><option value="">未答</option><option value="yes">是</option><option value="no">否</option></select></label>
+        <label>功能状态差（原文用 Specific Activity Scale）<select id="delFunction" class="yn"><option value="">未答</option><option value="yes">是</option><option value="no">否</option></select></label>
+        <label>术前血钠/钾/血糖明显异常<select id="delChem" class="yn"><option value="">未答</option><option value="yes">是</option><option value="no">否</option></select></label>
+        <label>非心脏胸科手术<select id="delThoracic" class="yn"><option value="">未答</option><option value="yes">是</option><option value="no">否</option></select></label>
+        <label>主动脉瘤手术（2 分）<select id="delAaa" class="yn"><option value="">未答</option><option value="yes">是</option><option value="no">否</option></select></label>
+      </div>
+      <div id="deliriumStatus" class="status yellow" role="status" aria-live="polite">谵妄预测：未完成</div>
+      <div class="small-note">各项 1 分、主动脉瘤手术 2 分；0 分低、1–2 分中、≥3 分高（验证队列谵妄率约 2%、8%–13%、50%）。TICS 与“明显异常”化验的具体界值未在本页复现（未能从原文核实）；不替代 CAM 等床旁谵妄筛查。</div>
+    </section>
+
+    <section id="modulePrefsSection" class="card" aria-labelledby="prefs-title" data-mobile-step="6">
+      <h2 id="prefs-title">模块显示设置（仅界面偏好）</h2>
+      <p class="hint">调整 v0.12 新增模块的顺序或隐藏。只把模块顺序/隐藏状态保存到本浏览器 localStorage，绝不保存任何患者数据。隐藏模块不会进入报告的“已完成”判断，报告中显示为“未完成/未录入”。</p>
+      <ul id="modulePrefsList" class="module-prefs-list"></ul>
+      <button type="button" class="secondary" id="modulePrefsReset">恢复默认顺序与显示</button>
+    </section>
+
     <section id="rcriSection" class="card" aria-labelledby="rcri-title" data-mobile-step="3">
       <h2 id="rcri-title">3. RCRI 基线风险教学评分</h2>
       <p class="hint">勾选 RCRI 评分项目后自动计算总分；上方手术信息、心脏病史和肌酐结果也会同步勾选对应项目。</p>
@@ -2514,11 +2636,16 @@
       <div class="button-row">
         <button type="button" onclick="generateReport()">生成评估报告</button>
         <button type="button" class="secondary" onclick="copyReport()">复制评估报告</button>
+        <button type="button" class="secondary" onclick="copyPasteSummary()">复制病历粘贴版</button>
         <button type="button" class="secondary" onclick="resetForm()">清空重新评估</button>
       </div>
       <label style="margin-top: 14px;">结构化评估报告
         <textarea id="report" readonly placeholder="点击“生成评估报告”后显示。"></textarea>
       </label>
+      <label style="margin-top: 14px;">病历粘贴版（精简，无身份信息字段）
+        <textarea id="pasteSummary" readonly placeholder="点击“复制病历粘贴版”后生成并复制。"></textarea>
+      </label>
+      <div id="pasteSummaryStatus" class="small-note" role="status" aria-live="polite"></div>
       <div class="small-note">本工具仅用于教学和临床辅助评估，不替代医生最终判断。</div>
     </section>
 
@@ -2622,7 +2749,7 @@
   </div>
 
   <footer class="footer-note">
-    v0.11.0 Stepwise Cardiovascular Decision Gate · candidate/in_review · AKB V2.1.1
+    v0.12.0 Stepwise Gate + Airway/ASA/PONV/ARISCAT/VTE-Delirium modules · candidate/in_review · AKB V2.1.1
   </footer>
 
   <!-- JavaScript 数据与逻辑区 -->
@@ -2631,7 +2758,7 @@
     // OPC-AKB-SNAPSHOT:START
     const OPC_KNOWLEDGE_SNAPSHOT = {
           "version": "AKB V2.1.1 / OPC Self-Growing Knowledge Loop",
-          "snapshotDate": "2026-08-01",
+          "snapshotDate": "2026-09-12",
           "generatedBy": "tools/akb_iteration_engine.py",
           "canonicalStore": "Obsidian AKB Markdown",
           "knowledgeHash": "fa485ce8a45a088668f51eb9",
@@ -2920,7 +3047,7 @@
       return [
         "学员术前评估提交快照",
         "提交时间：" + new Date().toLocaleString("zh-CN", { hour12: false }),
-        "产品版本：v0.11.0 / AKB V2.1.1 / " + OPC_KNOWLEDGE_SNAPSHOT.knowledgeHash,
+        "产品版本：v0.12.0 / AKB V2.1.1 / " + OPC_KNOWLEDGE_SNAPSHOT.knowledgeHash,
         "",
         "病例范围",
         "年龄/性别：" + (value("age") || "未填写") + " / " + (value("sex") || "未填写"),
@@ -2931,6 +3058,7 @@
         "",
         "结构化结果（仅供形成性反馈）",
         "RCRI：" + rcri.score + " 分；" + (rcri.reasons.length ? rcri.reasons.join("、") : "无得分项目"),
+        ...v012ModulesText(),
         "SORT：" + (layers.sortRisk === null ? "未录入" : layers.sortRisk + "%"),
         "DASI：" + (layers.dasiScore === null ? "未录入" : layers.dasiScore + " 分"),
         "脆弱性：" + (!layers.frailtyTool ? "未选择" : layers.frailtyTool + " " + (layers.frailtyScore === null ? "未录入" : layers.frailtyScore + " 分")),
@@ -3631,6 +3759,7 @@
         "肺功能：" + pulmonaryFunctionText(respiratory),
         "动脉血气：" + arterialBloodGasText(respiratory),
         "呼吸/重症MDT问题：" + (value("respMdtQuestion") || "未填写"),
+        "麻醉专项模块（v0.12，各自独立）：" + v012ModulesText().slice(0, -1).join("；"),
         "",
         "二、患者目标与共享决策",
         value("mdtPatientGoals") || "未填写患者目标、价值观、不能接受的结局与决策偏好",
@@ -3713,7 +3842,7 @@
 
       const report = [
         "非心脏手术术前分步心血管评估与 MDT 报告",
-        "版本：v0.11.0 Stepwise Cardiovascular Decision Gate / candidate-in_review",
+        "版本：v0.12.0 Stepwise Gate + 独立模块 / candidate-in_review",
         "",
         "一、手术时效、意义与患者目标",
         "拟行手术：" + (value("surgeryName") || "未填写"),
@@ -3764,10 +3893,13 @@
         "术后心血管监测计划：" + (value("postopSurveillancePlan") || "未填写"),
         mdtDraft,
         "",
-        "八、OPC/AKB 知识依据与边界",
+        "八、麻醉专项独立模块（v0.12 candidate/in_review，不合并总分）",
+        ...v012ModulesText(),
+        "",
+        "九、OPC/AKB 知识依据与边界",
         knowledgeBasisText(),
         "",
-        "九、免责声明",
+        "十、免责声明",
         DISCLAIMER
       ].join("\n");
 
@@ -3826,10 +3958,289 @@
       $("traineeSubmissionStatus").style.borderColor = "";
       $("traineeSubmissionSnapshot").textContent = "尚无提交快照。";
       $("teacherFeedback").value = "";
+      document.querySelectorAll("select, input").forEach(el => { if (el.dataset) delete el.dataset.auto; });
+      if ($("pasteSummary")) $("pasteSummary").value = "";
+      if (uiPrefs) applyUiPrefs();
       initializeRiskCards();
       showMobileFlowStep(1, false);
       updateEducationModeUI();
       updateAll();
+    }
+
+    /* BEGIN scales.js (generated by tools/inject_scales.py) */
+/* v0.12.0 candidate/in_review 独立评分模块（单一来源；tools/inject_scales.py 注入 index.html）。
+   每个模块独立输出，不合并总分；不生成手术许可、检查指征、药物或剂量。 */
+var PreopScales = (function () {
+  function yes(v) { return v === true || v === "yes"; }
+  function numOrNull(v) { var n = Number(v); return v === "" || v === null || v === undefined || !isFinite(n) ? null : n; }
+
+  /* STOP-Bang — Chung 2008 PMID 18431116；分层 Chung 2016 Chest PMID 26378880 */
+  var STOP_ITEMS = ["snoring", "tired", "observed", "pressure"];
+  var BANG_ITEMS = ["bmiOver35", "ageOver50", "neckOver40", "male"];
+  function computeStopBang(d) {
+    d = d || {};
+    var answered = STOP_ITEMS.concat(BANG_ITEMS).filter(function (k) { return d[k] === "yes" || d[k] === "no" || typeof d[k] === "boolean"; }).length;
+    var stop = STOP_ITEMS.filter(function (k) { return yes(d[k]); }).length;
+    var score = stop + BANG_ITEMS.filter(function (k) { return yes(d[k]); }).length;
+    var tier = null;
+    if (answered === 8) {
+      if (score >= 5) tier = "high";
+      else if (score <= 2) tier = "low";
+      else if (stop >= 2 && (yes(d.male) || yes(d.bmiOver35) || yes(d.neckOver40))) tier = "high";
+      else tier = "intermediate";
+    }
+    return { score: score, stopScore: stop, answered: answered, complete: answered === 8, tier: tier,
+      boundary: "OSA 筛查分层（非诊断）；不自动判定困难气道、不生成睡眠监测或 CPAP 处方。" };
+  }
+
+  /* Apfel 简化评分 — Apfel 1999 PMID 10485781：0–4 个因素 ≈ 10/21/39/61/79% */
+  var APFEL_PCT = [10, 21, 39, 61, 79];
+  function computeApfel(d) {
+    d = d || {};
+    var keys = ["female", "nonSmoker", "historyPonvOrMotion", "postopOpioids"];
+    var answered = keys.filter(function (k) { return d[k] === "yes" || d[k] === "no" || typeof d[k] === "boolean"; }).length;
+    var score = keys.filter(function (k) { return yes(d[k]); }).length;
+    return { score: score, complete: answered === 4, percent: answered === 4 ? APFEL_PCT[score] : null,
+      boundary: "原始人群为成人吸入麻醉；不生成止吐药物、剂量或预防方案。" };
+  }
+
+  /* ARISCAT — Canet 2010 PMID 21045639 */
+  var ARISCAT_POINTS = {
+    age: { le50: 0, "51to80": 3, gt80: 16 },
+    spo2: { ge96: 0, "91to95": 8, le90: 24 },
+    respInfection: { no: 0, yes: 17 },
+    anemia: { no: 0, yes: 11 },
+    incision: { peripheral: 0, upperAbdominal: 15, intrathoracic: 24 },
+    duration: { lt2: 0, "2to3": 16, gt3: 23 },
+    emergency: { no: 0, yes: 8 }
+  };
+  function ariscatAgeBand(age) { var a = numOrNull(age); return a === null ? "" : a <= 50 ? "le50" : a <= 80 ? "51to80" : "gt80"; }
+  function ariscatSpo2Band(s) { var v = numOrNull(s); return v === null ? "" : v >= 96 ? "ge96" : v >= 91 ? "91to95" : "le90"; }
+  function computeAriscat(d) {
+    d = d || {};
+    var missing = [], score = 0;
+    Object.keys(ARISCAT_POINTS).forEach(function (k) {
+      var pts = ARISCAT_POINTS[k][d[k]];
+      if (pts === undefined) missing.push(k); else score += pts;
+    });
+    var complete = missing.length === 0;
+    var tier = !complete ? null : score < 26 ? "low" : score < 45 ? "intermediate" : "high";
+    var pct = { low: 1.6, intermediate: 13.3, high: 42.1 };
+    return { score: score, complete: complete, missing: missing, tier: tier, validationPpcPercent: tier ? pct[tier] : null,
+      boundary: "术后肺部并发症风险分层；不合并 RCRI/SORT，不生成检查、通气或用药处方。" };
+  }
+
+  /* 术后谵妄预测规则 — Marcantonio 1994 PMID 8264068：各 1 分，主动脉瘤手术 2 分 */
+  var MARC_ITEMS = [["ageGe70", 1], ["alcoholAbuse", 1], ["poorCognition", 1], ["poorFunction", 1],
+    ["abnormalChem", 1], ["noncardiacThoracic", 1], ["aorticAneurysm", 2]];
+  function computeMarcantonio(d) {
+    d = d || {};
+    var answered = MARC_ITEMS.filter(function (it) { return d[it[0]] === "yes" || d[it[0]] === "no" || typeof d[it[0]] === "boolean"; }).length;
+    var score = MARC_ITEMS.reduce(function (s, it) { return s + (yes(d[it[0]]) ? it[1] : 0); }, 0);
+    var complete = answered === MARC_ITEMS.length;
+    var tier = !complete ? null : score === 0 ? "low" : score <= 2 ? "medium" : "high";
+    return { score: score, complete: complete, tier: tier,
+      boundary: "择期非心脏大手术人群（≥50岁）推导；不替代 CAM 等谵妄筛查，不生成用药处方。" };
+  }
+
+  /* Caprini — 仅记录外部结果（版本多、条目/分值不统一、授权未核实） */
+  function recordCaprini(d) {
+    d = d || {};
+    var s = numOrNull(d.score);
+    return { recorded: s !== null && d.version ? true : false, score: s, version: d.version || "",
+      boundary: "仅记录外部计算的 Caprini 分数与版本；本页不运行算法、不生成抗凝/机械预防方案。" };
+  }
+
+  /* ASA-PS 2020 — 用户自选，不自动分级 */
+  function formatAsa(cls, emergency) {
+    if (!cls) return "未选择";
+    return "ASA " + cls + (emergency && cls !== "VI" ? "E" : "");
+  }
+
+  return { computeStopBang: computeStopBang, computeApfel: computeApfel, computeAriscat: computeAriscat,
+    ariscatAgeBand: ariscatAgeBand, ariscatSpo2Band: ariscatSpo2Band, ARISCAT_POINTS: ARISCAT_POINTS,
+    computeMarcantonio: computeMarcantonio, recordCaprini: recordCaprini, formatAsa: formatAsa, APFEL_PCT: APFEL_PCT };
+})();
+    /* END scales.js */
+    /* ===== v0.12.0 独立模块胶水代码（candidate/in_review） ===== */
+    const V012_MODULES = ["asaSection", "airwaySection", "ariscatSection", "ponvSection", "vteDeliriumSection"];
+    const UI_PREFS_KEY = "preopWorkbench.uiPrefs.v1";
+    const TIER_ZH = { low: "低", intermediate: "中", medium: "中", high: "高" };
+    const TIER_CLASS = { low: "green", intermediate: "yellow", medium: "yellow", high: "red" };
+
+    function setStatus(id, text, tier) {
+      const el = $(id);
+      if (!el) return;
+      el.textContent = text;
+      el.className = "status " + (TIER_CLASS[tier] || "yellow");
+    }
+
+    function stopBangAssessment() {
+      return PreopScales.computeStopBang({
+        snoring: value("sbSnoring"), tired: value("sbTired"), observed: value("sbObserved"), pressure: value("sbPressure"),
+        bmiOver35: value("sbBmi"), ageOver50: value("sbAge"), neckOver40: value("sbNeck"), male: value("sbMale")
+      });
+    }
+    function apfelAssessment() {
+      return PreopScales.computeApfel({ female: value("apfelFemale"), nonSmoker: value("apfelNonSmoker"),
+        historyPonvOrMotion: value("apfelHistory"), postopOpioids: value("apfelOpioid") });
+    }
+    function ariscatAssessment() {
+      return PreopScales.computeAriscat({ age: value("ariAge"), spo2: value("ariSpo2"), respInfection: value("ariInfection"),
+        anemia: value("ariAnemia"), incision: value("ariIncision"), duration: value("ariDuration"), emergency: value("ariEmergency") });
+    }
+    function deliriumAssessment() {
+      return PreopScales.computeMarcantonio({ ageGe70: value("delAge"), alcoholAbuse: value("delAlcohol"), poorCognition: value("delCognition"),
+        poorFunction: value("delFunction"), abnormalChem: value("delChem"), noncardiacThoracic: value("delThoracic"), aorticAneurysm: value("delAaa") });
+    }
+    function capriniRecord() { return PreopScales.recordCaprini({ score: value("capriniScore"), version: value("capriniVersion") }); }
+
+    /* 仅在字段为空或之前由系统带入时自动预填，不覆盖手动选择 */
+    function autoFill(id, val) {
+      const el = $(id);
+      if (!el || !val) return;
+      if (el.value === "" || el.dataset.auto === "auto") { el.value = val; el.dataset.auto = "auto"; }
+    }
+    function syncV012Prefill() {
+      autoFill("ariAge", PreopScales.ariscatAgeBand(value("age")));
+      autoFill("ariSpo2", PreopScales.ariscatSpo2Band(value("restingSpo2")));
+      const age = Number(value("age"));
+      if (value("age") !== "" && isFinite(age)) { autoFill("sbAge", age > 50 ? "yes" : "no"); autoFill("delAge", age >= 70 ? "yes" : "no"); }
+      const bmi = Number(value("bmi"));
+      if (value("bmi") !== "" && isFinite(bmi)) autoFill("sbBmi", bmi > 35 ? "yes" : "no");
+      const sex = value("sex");
+      if (/男|male/i.test(sex)) { autoFill("sbMale", "yes"); autoFill("apfelFemale", "no"); }
+      else if (/女|female/i.test(sex)) { autoFill("sbMale", "no"); autoFill("apfelFemale", "yes"); }
+      if (value("surgeryTiming") === "立即" || value("surgeryTiming") === "紧急") autoFill("ariEmergency", "yes");
+      else if (value("surgeryTiming")) autoFill("ariEmergency", "no");
+    }
+
+    function airwayRecordText() {
+      const parts = [
+        "Mallampati " + (value("airwayMallampati") || "未评估"),
+        "张口度 " + (value("airwayMouthOpening") || "未记录"),
+        "甲颏距离 " + (value("airwayThyromental") ? value("airwayThyromental") + " cm" : "未记录"),
+        "颈部活动 " + (value("airwayNeck") || "未评估"),
+        "既往困难气道 " + (value("airwayPriorDifficult") || "未询问")
+      ];
+      if (value("airwayNotes")) parts.push("其他：" + value("airwayNotes"));
+      return parts.join("；") + "（仅记录发现，不自动判定困难气道）";
+    }
+    function stopBangText(r) { r = r || stopBangAssessment(); return r.complete ? r.score + "/8，" + TIER_ZH[r.tier] + "风险（STOP " + r.stopScore + "/4）" : "未完成（已答 " + r.answered + "/8，当前 " + r.score + " 分）"; }
+    function apfelText(r) { r = r || apfelAssessment(); return r.complete ? r.score + "/4 个因素，文献 PONV 发生率约 " + r.percent + "%" : "未完成"; }
+    function ariscatText(r) { r = r || ariscatAssessment(); return r.complete ? r.score + " 分，" + TIER_ZH[r.tier] + "风险（验证子样本 PPC 约 " + r.validationPpcPercent + "%）" : "未完成（缺 " + r.missing.length + " 项）"; }
+    function deliriumText(r) { r = r || deliriumAssessment(); return r.complete ? r.score + " 分，" + TIER_ZH[r.tier] + "风险（Marcantonio 1994）" : "未完成"; }
+    function capriniText(r) { r = r || capriniRecord(); return r.recorded ? r.score + " 分（外部计算，" + r.version + "）" : "未录入（需同时填写分数与版本）"; }
+    function asaText() { return PreopScales.formatAsa(value("asa"), checked("asaEmergency")) + "（使用者自选）"; }
+
+    function v012ModulesText() {
+      return [
+        "ASA-PS：" + asaText(),
+        "气道床旁记录：" + airwayRecordText(),
+        "STOP-Bang：" + stopBangText(),
+        "ARISCAT：" + ariscatText(),
+        "PONV Apfel：" + apfelText(),
+        "Caprini：" + capriniText(),
+        "术后谵妄预测：" + deliriumText(),
+        "边界：以上各模块独立显示、不合并总分；不生成手术许可、检查指征、药物或剂量。"
+      ];
+    }
+
+    function updateV012Modules() {
+      syncV012Prefill();
+      const cls = value("asa");
+      setStatus("asaStatus", "ASA：" + asaText(), "");
+      document.querySelectorAll(".asa-table tr[data-asa]").forEach(row => row.classList.toggle("asa-selected", row.dataset.asa === cls));
+      const sb = stopBangAssessment(); setStatus("stopBangStatus", "STOP-Bang：" + stopBangText(sb), sb.tier);
+      const ari = ariscatAssessment(); setStatus("ariscatStatus", "ARISCAT：" + ariscatText(ari), ari.tier);
+      const ap = apfelAssessment(); setStatus("apfelStatus", "Apfel：" + apfelText(ap), ap.complete ? (ap.score <= 1 ? "low" : ap.score === 2 ? "intermediate" : "high") : "");
+      setStatus("capriniStatus", "Caprini：" + capriniText(), "");
+      const de = deliriumAssessment(); setStatus("deliriumStatus", "谵妄预测：" + deliriumText(de), de.tier);
+    }
+
+    function buildPasteSummary() {
+      calculateBMI();
+      const rcri = calculateRCRI();
+      const layers = layeredAssessment();
+      const respiratory = respiratoryAssessment();
+      const text = [
+        "【术前评估（教学草稿，待上级审核）】",
+        "拟行手术：" + (value("surgeryName") || "未填写") + "；时机/风险：" + (value("surgeryTiming") || "未填写") + "/" + (value("surgeryRisk") || "未填写"),
+        "年龄/性别：" + (value("age") || "未填写") + "/" + (value("sex") || "未填写") + "；BMI " + (value("bmi") || "未计算"),
+        "急性心脏门禁：" + safetyGateText(),
+        "RCRI " + rcri.score + " 分；SORT " + (layers.sortRisk === null ? "未录入" : layers.sortRisk + "%") + "；DASI " + (layers.dasiScore === null ? "未录入" : layers.dasiScore),
+        "呼吸：SpO₂ " + (respiratory.spo2 === null ? "未录入" : respiratory.spo2 + "%") + "；" + (respiratory.conditions.length ? respiratory.conditions.join("、") : "未勾选呼吸线索")
+      ].concat(v012ModulesText()).concat([
+        "学员判断：" + (value("traineeJudgment") || "未填写"),
+        "以上为教学/验证原型输出（locked_review_pending），不替代医生最终判断。"
+      ]).join("\n");
+      $("pasteSummary").value = text;
+      return text;
+    }
+    async function copyPasteSummary() {
+      const text = buildPasteSummary();
+      try { await navigator.clipboard.writeText(text); }
+      catch (error) { $("pasteSummary").focus(); $("pasteSummary").select(); document.execCommand("copy"); }
+      $("pasteSummaryStatus").textContent = "病历粘贴版已复制（不含患者身份信息字段）。";
+    }
+
+    /* ---- UI 偏好：仅模块顺序/隐藏，绝不写入患者数据 ---- */
+    function sanitizeUiPrefs(raw) {
+      const out = { order: V012_MODULES.slice(), hidden: [] };
+      if (!raw || typeof raw !== "object") return out;
+      if (Array.isArray(raw.order)) {
+        const seen = raw.order.filter(id => V012_MODULES.includes(id));
+        out.order = Array.from(new Set(seen)).concat(V012_MODULES.filter(id => !seen.includes(id)));
+      }
+      if (Array.isArray(raw.hidden)) out.hidden = Array.from(new Set(raw.hidden.filter(id => V012_MODULES.includes(id))));
+      return out;
+    }
+    function loadUiPrefs() {
+      try { return sanitizeUiPrefs(JSON.parse(localStorage.getItem(UI_PREFS_KEY) || "null")); }
+      catch (error) { return sanitizeUiPrefs(null); }
+    }
+    function saveUiPrefs(prefs) {
+      try { localStorage.setItem(UI_PREFS_KEY, JSON.stringify({ order: prefs.order, hidden: prefs.hidden })); } catch (error) { /* 无存储时仅本次生效 */ }
+    }
+    let uiPrefs = null;
+    function applyUiPrefs() {
+      const anchor = $("respiratorySection");
+      let after = anchor;
+      uiPrefs.order.forEach(id => {
+        const sec = $(id);
+        if (!sec) return;
+        if (id !== "asaSection" && after && after.parentNode) { after.after(sec); after = sec; }
+        sec.classList.toggle("pref-hidden", uiPrefs.hidden.includes(id));
+      });
+      renderUiPrefs();
+    }
+    function renderUiPrefs() {
+      const list = $("modulePrefsList");
+      if (!list) return;
+      list.innerHTML = "";
+      uiPrefs.order.forEach((id, index) => {
+        const sec = $(id);
+        const li = document.createElement("li");
+        const label = document.createElement("span");
+        label.textContent = (sec && sec.dataset.moduleLabel) || id;
+        const up = document.createElement("button"); up.type = "button"; up.className = "secondary"; up.textContent = "上移"; up.disabled = index === 0;
+        up.setAttribute("aria-label", "上移 " + label.textContent);
+        up.onclick = () => { [uiPrefs.order[index - 1], uiPrefs.order[index]] = [uiPrefs.order[index], uiPrefs.order[index - 1]]; saveUiPrefs(uiPrefs); applyUiPrefs(); };
+        const down = document.createElement("button"); down.type = "button"; down.className = "secondary"; down.textContent = "下移"; down.disabled = index === uiPrefs.order.length - 1;
+        down.setAttribute("aria-label", "下移 " + label.textContent);
+        down.onclick = () => { [uiPrefs.order[index + 1], uiPrefs.order[index]] = [uiPrefs.order[index], uiPrefs.order[index + 1]]; saveUiPrefs(uiPrefs); applyUiPrefs(); };
+        const hide = document.createElement("label"); hide.className = "check";
+        const box = document.createElement("input"); box.type = "checkbox"; box.checked = uiPrefs.hidden.includes(id); box.dataset.uiPref = "1";
+        box.onchange = event => { event.stopPropagation(); uiPrefs.hidden = box.checked ? uiPrefs.hidden.concat(id) : uiPrefs.hidden.filter(x => x !== id); saveUiPrefs(uiPrefs); applyUiPrefs(); };
+        hide.append(box, document.createTextNode("隐藏"));
+        li.append(label, up, down, hide);
+        list.appendChild(li);
+      });
+    }
+    function initializeUiPrefs() {
+      uiPrefs = loadUiPrefs();
+      $("modulePrefsReset").onclick = () => { uiPrefs = sanitizeUiPrefs(null); saveUiPrefs(uiPrefs); applyUiPrefs(); };
+      applyUiPrefs();
     }
 
     function updateAll() {
@@ -3844,12 +4255,14 @@
       assessMETs();
       generateRecommendations();
       updateMdtCandidateSignals();
+      updateV012Modules();
     }
 
     function handleFormChange(event) {
       if (event.target.classList && event.target.classList.contains("rcri-item")) {
         event.target.dataset.auto = event.target.checked ? "manual" : "";
       }
+      if (event.target.dataset && event.target.dataset.auto === "auto" && event.isTrusted) delete event.target.dataset.auto;
       updateAll();
     }
 
@@ -3859,8 +4272,9 @@
       const main = document.querySelector("main");
       [
         "surgerySection", "patientSection", "safetyGateSection", "historySection",
-        "rcriSection", "layerSection", "examSection", "respiratorySection",
-        "recommendSection", "mdtSection", "reportSection", "teacherReviewSection"
+        "asaSection", "rcriSection", "layerSection", "examSection", "respiratorySection",
+        "airwaySection", "ariscatSection", "ponvSection", "vteDeliriumSection",
+        "recommendSection", "mdtSection", "reportSection", "modulePrefsSection", "teacherReviewSection"
       ].forEach(id => {
         const section = $(id);
         if (section) main.appendChild(section);
@@ -3868,6 +4282,7 @@
       initializeRiskCards();
       initializeMobileFlow();
       initializeEducationModes();
+      initializeUiPrefs();
       updateAll();
     });
   </script>
