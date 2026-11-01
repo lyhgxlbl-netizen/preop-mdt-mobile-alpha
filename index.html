@@ -1730,7 +1730,7 @@
       </div>
       <div class="education-mode-switch" aria-label="选择教学身份">
         <button id="traineeModeButton" type="button" class="education-mode-button" aria-pressed="true">学员模式</button>
-        <button id="teacherModeButton" type="button" class="education-mode-button" aria-pressed="false" disabled>教师模式</button>
+        <button id="teacherModeButton" type="button" class="education-mode-button" aria-pressed="false">教师模式</button>
       </div>
     </div>
   </section>
@@ -2534,7 +2534,7 @@
           <button id="submitTraineeButton" type="button">提交学员初评并解锁提示</button>
           <button id="reviseTraineeButton" type="button" class="secondary" hidden>退回继续修改</button>
         </div>
-        <div id="traineeSubmissionStatus" class="small-note" role="status" aria-live="polite">尚未提交；教师模式和教学提示保持锁定。</div>
+        <div id="traineeSubmissionStatus" class="small-note" role="status" aria-live="polite">尚未提交；教学提示保持锁定。教师模式可直接进入。</div>
       </div>
       <h3>系统教学提示</h3>
       <div id="recommendationLock" class="training-lock-note">完成并提交学员初评后显示。请先形成自己的临床推理。</div>
@@ -3012,14 +3012,14 @@
       const teacherMode = educationMode === "teacher";
       $("traineeModeButton").setAttribute("aria-pressed", String(!teacherMode));
       $("teacherModeButton").setAttribute("aria-pressed", String(teacherMode));
-      $("teacherModeButton").disabled = !traineeSubmitted;
+      $("teacherModeButton").disabled = false;
       $("teacherReviewSection").hidden = !teacherMode;
       document.body.classList.toggle("education-teacher", teacherMode);
 
       $("educationModeStatus").textContent = teacherMode
         ? "教师模式：基于学员提交快照进行形成性评价，不自动判定合格。"
         : traineeSubmitted
-          ? "学员初评已提交；教学提示已解锁，可切换教师模式。"
+          ? "学员初评已提交；教学提示已解锁。"
           : "学员先独立判断；提交后解锁教学提示和教师评价。";
 
       $("recommendationLock").hidden = traineeSubmitted || teacherMode;
@@ -3029,10 +3029,6 @@
     }
 
     function setEducationMode(mode) {
-      if (mode === "teacher" && !traineeSubmitted) {
-        $("educationModeStatus").textContent = "请先由学员提交初评，再进入教师模式。";
-        return;
-      }
       educationMode = mode === "teacher" ? "teacher" : "trainee";
       updateEducationModeUI();
       if (educationMode === "teacher" && MOBILE_FLOW_MEDIA.matches) {
@@ -3110,7 +3106,7 @@
       $("submitTraineeButton").disabled = true;
       $("reviseTraineeButton").hidden = false;
       $("traineeSubmissionSnapshot").textContent = traineeSubmissionSnapshot;
-      status.textContent = "学员初评已锁定为提交快照；教学提示和教师模式已解锁。";
+      status.textContent = "学员初评已锁定为提交快照；教学提示已解锁。";
       status.style.borderColor = "";
       updateEducationModeUI();
     }
@@ -3126,7 +3122,7 @@
       $("reviseTraineeButton").hidden = true;
       $("traineeSubmissionSnapshot").textContent = "尚无提交快照。";
       $("teacherFeedback").value = "";
-      $("traineeSubmissionStatus").textContent = "已退回修改；重新提交前，教师模式和教学提示保持锁定。";
+      $("traineeSubmissionStatus").textContent = "已退回修改；重新提交前，教学提示保持锁定。教师模式仍可进入。";
       updateEducationModeUI();
       if (MOBILE_FLOW_MEDIA.matches) showMobileFlowStep(3);
       $("traineeJudgment").focus();
@@ -3954,7 +3950,7 @@
       $("traineePlan").removeAttribute("aria-invalid");
       $("submitTraineeButton").disabled = false;
       $("reviseTraineeButton").hidden = true;
-      $("traineeSubmissionStatus").textContent = "尚未提交；教师模式和教学提示保持锁定。";
+      $("traineeSubmissionStatus").textContent = "尚未提交；教学提示保持锁定。教师模式可直接进入。";
       $("traineeSubmissionStatus").style.borderColor = "";
       $("traineeSubmissionSnapshot").textContent = "尚无提交快照。";
       $("teacherFeedback").value = "";
